@@ -1,7 +1,9 @@
 function showTasksPage(projectId){
 
     const project = projects.find(p => p.id === projectId);
-
+if (!project.tasks) {
+    project.tasks = [];
+}
     setPage(`
 
 <h1>✅ Aufgaben</h1>
