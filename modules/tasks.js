@@ -1,9 +1,15 @@
+// =============================================
+// LumaFlow
+// Aufgaben
+// =============================================
+
 function showTasksPage(projectId){
 
     const project = projects.find(p => p.id === projectId);
-if (!project.tasks) {
-    project.tasks = [];
-}
+
+    if(!project.tasks)
+        project.tasks=[];
+
     setPage(`
 
 <h1>✅ Aufgaben</h1>
@@ -12,7 +18,8 @@ if (!project.tasks) {
 
 <br>
 
-<button class="btn btn-primary" onclick="openTaskModal('${project.id}')">
+<button class="btn btn-primary"
+onclick="openTaskModal()">
 
 + Aufgabe
 
@@ -33,7 +40,7 @@ if (!project.tasks) {
 <th>Fällig</th>
 <th>Priorität</th>
 <th>Status</th>
-<th></th>
+<th width="70"></th>
 
 </tr>
 
@@ -51,27 +58,37 @@ if (!project.tasks) {
 
 <h2>Neue Aufgabe</h2>
 
-<input id="taskTitle" placeholder="Titel">
+<input
+id="taskTitle"
+placeholder="Titel">
 
-<textarea id="taskDescription"
+<textarea
+
+id="taskDescription"
+
 placeholder="Beschreibung"
-style="width:100%;height:90px;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;"></textarea>
+
+style="width:100%;height:90px;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;">
+
+</textarea>
 
 <select id="taskPerson"></select>
 
-<input type="date" id="taskDate">
+<input
+type="date"
+id="taskDate">
 
 <select id="taskPriority">
 
 <option>Niedrig</option>
-<option>Mittel</option>
+<option selected>Mittel</option>
 <option>Hoch</option>
 
 </select>
 
 <select id="taskStatus">
 
-<option>Offen</option>
+<option selected>Offen</option>
 <option>In Bearbeitung</option>
 <option>Erledigt</option>
 
@@ -79,12 +96,20 @@ style="width:100%;height:90px;padding:10px;margin-bottom:15px;border:1px solid #
 
 <div class="modal-buttons">
 
-<button class="btn" onclick="closeTaskModal()">
+<button
+class="btn"
+onclick="closeTaskModal()">
+
 Abbrechen
+
 </button>
 
-<button class="btn btn-primary" onclick="saveTask('${project.id}')">
+<button
+class="btn btn-primary"
+onclick="saveTask('${project.id}')">
+
 Speichern
+
 </button>
 
 </div>
@@ -95,7 +120,9 @@ Speichern
 
 <br>
 
-<button class="btn" onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
+<button
+class="btn"
+onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
 
 ← Zurück
 
@@ -109,7 +136,7 @@ Speichern
 
 }
 
-// --------------------------
+// =============================================
 
 function loadPersons(){
 
@@ -121,7 +148,7 @@ function loadPersons(){
 
         select.innerHTML+=`
 
-<option>
+<option value="${person.name}">
 
 ${person.name}
 
@@ -133,7 +160,7 @@ ${person.name}
 
 }
 
-// --------------------------
+// =============================================
 
 function renderTasks(project){
 
@@ -144,11 +171,17 @@ function renderTasks(project){
     if(project.tasks.length===0){
 
         table.innerHTML=`
+
 <tr>
+
 <td colspan="6">
+
 Noch keine Aufgaben vorhanden.
+
 </td>
+
 </tr>
+
 `;
 
         return;
@@ -163,18 +196,46 @@ Noch keine Aufgaben vorhanden.
 
 <td>${task.title}</td>
 
-<td>${task.person}</td>
+<td>${task.person || task.assigned || "-"}</td>
 
-<td>${task.date}</td>
+<td>${task.date || task.due || "-"}</td>
 
-<td>${task.priority}</td>
-
-<td>${task.status}</td>
+<td>${task.priority || "-"}</td>
 
 <td>
 
-<button class="btn btn-danger"
+<select
+onchange="updateTaskStatus('${project.id}',${index},this.value)">
 
+<option value="Offen"
+${task.status==="Offen"?"selected":""}>
+
+Offen
+
+</option>
+
+<option value="In Bearbeitung"
+${task.status==="In Bearbeitung"?"selected":""}>
+
+In Bearbeitung
+
+</option>
+
+<option value="Erledigt"
+${task.status==="Erledigt"?"selected":""}>
+
+Erledigt
+
+</option>
+
+</select>
+
+</td>
+
+<td>
+
+<button
+class="btn btn-danger"
 onclick="deleteTask('${project.id}',${index})">
 
 🗑️
@@ -191,58 +252,79 @@ onclick="deleteTask('${project.id}',${index})">
 
 }
 
-// --------------------------
+// =============================================
 
 function openTaskModal(){
 
-document.getElementById("taskModal").style.display="flex";
+    document.getElementById("taskModal").style.display="flex";
 
 }
 
 function closeTaskModal(){
 
-document.getElementById("taskModal").style.display="none";
+    document.getElementById("taskModal").style.display="none";
 
 }
 
-// --------------------------
+// =============================================
 
 function saveTask(projectId){
 
-const project=projects.find(p=>p.id===projectId);
+    const project=projects.find(p=>p.id===projectId);
 
-project.tasks.push({
+    if(!project.tasks)
+        project.tasks=[];
 
-title:document.getElementById("taskTitle").value,
+    project.tasks.push({
 
-description:document.getElementById("taskDescription").value,
+        id:crypto.randomUUID(),
 
-person:document.getElementById("taskPerson").value,
+        title:document.getElementById("taskTitle").value,
 
-date:document.getElementById("taskDate").value,
+        description:document.getElementById("taskDescription").value,
 
-priority:document.getElementById("taskPriority").value,
+        person:document.getElementById("taskPerson").value,
 
-status:document.getElementById("taskStatus").value
+        assigned:document.getElementById("taskPerson").value,
 
-});
+        date:document.getElementById("taskDate").value,
 
-saveProjects();
+        due:document.getElementById("taskDate").value,
 
-showTasksPage(projectId);
+        priority:document.getElementById("taskPriority").value,
+
+        status:document.getElementById("taskStatus").value
+
+    });
+
+    saveProjects();
+
+    showTasksPage(projectId);
 
 }
 
-// --------------------------
+// =============================================
 
 function deleteTask(projectId,index){
 
-const project=projects.find(p=>p.id===projectId);
+    const project=projects.find(p=>p.id===projectId);
 
-project.tasks.splice(index,1);
+    project.tasks.splice(index,1);
 
-saveProjects();
+    saveProjects();
 
-showTasksPage(projectId);
+    showTasksPage(projectId);
+
+}
+
+// =============================================
+
+function updateTaskStatus(projectId,index,status){
+
+    const project=projects.find(p=>p.id===projectId);
+
+    project.tasks[index].status=status;
+
+    saveProjects();
 
 }
