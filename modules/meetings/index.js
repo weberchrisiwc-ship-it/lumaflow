@@ -1,15 +1,15 @@
 // =============================================
 // LumaFlow
 // Meetings
-// Version 2.0
 // =============================================
 
 const MeetingModule = {
 
     open(projectId){
 
-        const project =
-            projects.find(p=>p.id===projectId);
+        const project = projects.find(p => p.id === projectId);
+
+        if(!project) return;
 
         if(!project.meetings)
             project.meetings=[];
@@ -20,7 +20,7 @@ const MeetingModule = {
         const closedMeetings =
             project.meetings.filter(m=>m.status==="closed").length;
 
-        let html=`
+        let html = `
 
 <h1>📅 Besprechungen</h1>
 
@@ -54,10 +54,7 @@ const MeetingModule = {
 
 </div>
 
-<div style="
-display:flex;
-justify-content:space-between;
-margin:25px 0;">
+<div style="display:flex;justify-content:space-between;margin:25px 0;">
 
 <button
 class="btn btn-primary"
@@ -81,7 +78,7 @@ onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
 
         if(project.meetings.length===0){
 
-            html+=`
+            html += `
 
 <div class="card">
 
@@ -97,46 +94,33 @@ Noch keine Besprechungen vorhanden.
                 .sort((a,b)=>b.date.localeCompare(a.date))
                 .forEach((meeting,index)=>{
 
-                html+=`
+                html += `
 
 <div class="card">
 
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;">
+<div style="display:flex;justify-content:space-between;align-items:center;">
 
 <div>
 
 <h2>${meeting.title}</h2>
 
-<p>
+<p>📅 ${meeting.date}</p>
 
-📅 ${meeting.date}
+<p>📍 ${meeting.location || "-"}</p>
 
-</p>
-
-<p>
-
-📍 ${meeting.location || "-"}
-
-</p>
-
-<p>
-
-👥 ${(meeting.participants||[]).length} Teilnehmer
-
-</p>
+<p>👥 ${(meeting.participants || []).length} Teilnehmer</p>
 
 </div>
 
 <div>
 
-${meeting.status==="closed"
-
-?'<span style="color:#16a34a;font-weight:bold;">🟢 Abgeschlossen</span>'
-
-:'<span style="color:#d97706;font-weight:bold;">🟡 Offen</span>'}
+${
+meeting.status==="closed"
+?
+'<span style="color:#16a34a;font-weight:bold;">🟢 Abgeschlossen</span>'
+:
+'<span style="color:#d97706;font-weight:bold;">🟡 Offen</span>'
+}
 
 </div>
 
@@ -144,17 +128,16 @@ ${meeting.status==="closed"
 
 <br>
 
-<div style="display:flex;gap:10px;">
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
 
 <button
 class="btn btn-primary"
 onclick="MeetingModule.edit('${project.id}',${index})">
 
-${meeting.status==="closed"
-?"Ansehen"
-:"Bearbeiten"}
+${meeting.status==="closed" ? "👁 Ansehen" : "✏️ Bearbeiten"}
 
 </button>
+
 <button
 class="btn"
 onclick="MeetingProtocol.previewMeeting('${project.id}',${index})">
@@ -185,9 +168,7 @@ onclick="MeetingModule.remove('${project.id}',${index})">
 
     },
 
-    // ==========================================
-    // Neue Besprechung
-    // ==========================================
+    // ----------------------------
 
     newMeeting(projectId){
 
@@ -195,9 +176,7 @@ onclick="MeetingModule.remove('${project.id}',${index})">
 
     },
 
-    // ==========================================
-    // Bearbeiten
-    // ==========================================
+    // ----------------------------
 
     edit(projectId,index){
 
@@ -205,9 +184,7 @@ onclick="MeetingModule.remove('${project.id}',${index})">
 
     },
 
-    // ==========================================
-    // Löschen
-    // ==========================================
+    // ----------------------------
 
     remove(projectId,index){
 
@@ -216,6 +193,8 @@ onclick="MeetingModule.remove('${project.id}',${index})">
 
         const project =
             projects.find(p=>p.id===projectId);
+
+        if(!project) return;
 
         project.meetings.splice(index,1);
 
@@ -226,3 +205,70 @@ onclick="MeetingModule.remove('${project.id}',${index})">
     }
 
 };
+
+// =============================================
+// Menüpunkt "Besprechungen"
+// =============================================
+
+function showMeetings(){
+
+    let html = `
+
+<h1>📅 Besprechungen</h1>
+
+`;
+
+    let found = false;
+
+    projects.forEach(project=>{
+
+        if((project.meetings || []).length===0)
+            return;
+
+        found = true;
+
+        html += `
+
+<div class="card">
+
+<h2>${project.number} - ${project.name}</h2>
+
+<p>
+
+${project.meetings.length} Besprechungen
+
+</p>
+
+<br>
+
+<button
+class="btn btn-primary"
+onclick="MeetingModule.open('${project.id}')">
+
+Öffnen
+
+</button>
+
+</div>
+
+`;
+
+    });
+
+    if(!found){
+
+        html += `
+
+<div class="card">
+
+Noch keine Besprechungen vorhanden.
+
+</div>
+
+`;
+
+    }
+
+    setPage(html);
+
+}
