@@ -9,9 +9,9 @@
 <title>LumaFlow</title>
 
 <link rel="stylesheet" href="style.css">
-    
+
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.css" rel="stylesheet">
-    
+
 </head>
 
 <body>
@@ -36,6 +36,11 @@
             <button id="navProjects" onclick="navigate('projects')">
                 <span>📁</span>
                 <span>Projekte</span>
+            </button>
+
+            <button id="navCalendar" onclick="navigate('calendar')">
+                <span>🗓️</span>
+                <span>Kalender</span>
             </button>
 
             <hr>
@@ -117,6 +122,12 @@ function navigate(page){
             showProjects();
             break;
 
+        case "calendar":
+
+            setActiveNavigation("navCalendar");
+            showCalendar();
+            break;
+
         case "tasks":
 
             setActiveNavigation("navTasks");
@@ -157,6 +168,8 @@ window.onload=()=>{
 <script src="modules/projects.js"></script>
 <script src="modules/tasks.js"></script>
 
+<script src="modules/calendar.js"></script>
+
 <script src="modules/meetings/index.js"></script>
 <script src="modules/meetings/parser.js"></script>
 <script src="modules/meetings/editor.js"></script>
@@ -167,9 +180,9 @@ window.onload=()=>{
 <script src="modules/protocols.js"></script>
 <script src="modules/contacts.js"></script>
 
-<script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
-<script src="modules/calendar.js"></script>
+
+<script src="app.js"></script>
 
 </body>
 
