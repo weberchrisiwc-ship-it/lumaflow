@@ -271,7 +271,16 @@ finish(){
                 : this.meetingIndex
         ];
 
-    meeting.status="closed";
+    if(meeting.status==="closed"){
+
+    alert("Diese Besprechung wurde bereits abgeschlossen.");
+
+    return;
+
+}
+
+meeting.status="closed";
+meeting.closedAt=new Date().toISOString();
 
     if(!this.project.tasks)
         this.project.tasks=[];
