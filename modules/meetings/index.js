@@ -1,34 +1,74 @@
 // =============================================
 // LumaFlow
-// Meetings - Übersicht
-// Version 1.0
+// Meetings
+// Version 2.0
 // =============================================
 
 const MeetingModule = {
 
-    open(projectId) {
+    open(projectId){
 
-        const project = projects.find(p => p.id === projectId);
+        const project =
+            projects.find(p=>p.id===projectId);
 
-        if (!project.meetings)
-            project.meetings = [];
+        if(!project.meetings)
+            project.meetings=[];
 
-        let html = `
+        const openMeetings =
+            project.meetings.filter(m=>m.status!=="closed").length;
+
+        const closedMeetings =
+            project.meetings.filter(m=>m.status==="closed").length;
+
+        let html=`
 
 <h1>📅 Besprechungen</h1>
 
 <h2>${project.number} - ${project.name}</h2>
 
-<div class="toolbar">
+<div class="cards">
 
-<button class="btn btn-primary"
+<div class="card">
+
+<h3>🟡 Offen</h3>
+
+<h1>${openMeetings}</h1>
+
+</div>
+
+<div class="card">
+
+<h3>🟢 Abgeschlossen</h3>
+
+<h1>${closedMeetings}</h1>
+
+</div>
+
+<div class="card">
+
+<h3>📅 Gesamt</h3>
+
+<h1>${project.meetings.length}</h1>
+
+</div>
+
+</div>
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin:25px 0;">
+
+<button
+class="btn btn-primary"
 onclick="MeetingModule.newMeeting('${project.id}')">
 
 + Neue Besprechung
 
 </button>
 
-<button class="btn"
+<button
+class="btn"
 onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
 
 ← Zurück
@@ -39,61 +79,87 @@ onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
 
 `;
 
-        if (project.meetings.length === 0) {
+        if(project.meetings.length===0){
 
-            html += `
+            html+=`
 
 <div class="card">
 
-<h3>Noch keine Besprechungen vorhanden.</h3>
-
-<p>Erstelle deine erste Besprechung.</p>
+Noch keine Besprechungen vorhanden.
 
 </div>
 
 `;
 
-        } else {
+        }else{
 
-            project.meetings.forEach((meeting,index)=>{
+            project.meetings
+                .sort((a,b)=>b.date.localeCompare(a.date))
+                .forEach((meeting,index)=>{
 
-                html += `
+                html+=`
 
-<div class="card meeting-card">
+<div class="card">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;">
+
+<div>
 
 <h2>${meeting.title}</h2>
 
-<p>📅 ${meeting.date}</p>
-
-<p>📍 ${meeting.location || "-"}</p>
-
 <p>
 
-${meeting.status==="closed"
-
-? "🟢 Abgeschlossen"
-
-: "🟡 Offen"}
+📅 ${meeting.date}
 
 </p>
 
-<div style="margin-top:20px;">
+<p>
 
-<button
-class="btn btn-primary"
-onclick="MeetingModule.edit('${project.id}',${index})">
+📍 ${meeting.location || "-"}
 
-Öffnen
+</p>
+
+<p>
+
+👥 ${(meeting.participants||[]).length} Teilnehmer
+
+</p>
+
+</div>
+
+<div>
+
+${meeting.status==="closed"
+
+?'<span style="color:#16a34a;font-weight:bold;">🟢 Abgeschlossen</span>'
+
+:'<span style="color:#d97706;font-weight:bold;">🟡 Offen</span>'}
+
+</div>
+
+</div>
+
+<br>
+
+<div style="display:flex;gap:10px;">
 
 <button
 class="btn btn-primary"
 onclick="MeetingModule.edit('${project.id}',${index})">
 
 ${meeting.status==="closed"
+?"Ansehen"
+:"Bearbeiten"}
 
-? "Ansehen"
+</button>
+<button
+class="btn"
+onclick="MeetingProtocol.previewMeeting('${project.id}',${index})">
 
-: "Bearbeiten"}
+📄 Protokoll
 
 </button>
 
@@ -101,7 +167,7 @@ ${meeting.status==="closed"
 class="btn btn-danger"
 onclick="MeetingModule.remove('${project.id}',${index})">
 
-Löschen
+🗑️ Löschen
 
 </button>
 
@@ -119,11 +185,19 @@ Löschen
 
     },
 
+    // ==========================================
+    // Neue Besprechung
+    // ==========================================
+
     newMeeting(projectId){
 
         MeetingEditor.open(projectId);
 
     },
+
+    // ==========================================
+    // Bearbeiten
+    // ==========================================
 
     edit(projectId,index){
 
@@ -131,12 +205,17 @@ Löschen
 
     },
 
+    // ==========================================
+    // Löschen
+    // ==========================================
+
     remove(projectId,index){
 
-        if(!confirm("Besprechung löschen?"))
+        if(!confirm("Besprechung wirklich löschen?"))
             return;
 
-        const project = projects.find(p=>p.id===projectId);
+        const project =
+            projects.find(p=>p.id===projectId);
 
         project.meetings.splice(index,1);
 
