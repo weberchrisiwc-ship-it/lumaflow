@@ -1,11 +1,12 @@
 // =============================================
 // LumaFlow
-// Aufgaben
+// Aufgaben 2.0
+// Kanban Board
 // =============================================
 
 function showTasksPage(projectId){
 
-    const project = projects.find(p => p.id === projectId);
+    const project = projects.find(p=>p.id===projectId);
 
     if(!project.tasks)
         project.tasks=[];
@@ -18,7 +19,8 @@ function showTasksPage(projectId){
 
 <br>
 
-<button class="btn btn-primary"
+<button
+class="btn btn-primary"
 onclick="openTaskModal()">
 
 + Aufgabe
@@ -27,28 +29,31 @@ onclick="openTaskModal()">
 
 <br><br>
 
+<div class="cards" style="grid-template-columns:repeat(3,1fr);">
+
 <div class="card">
 
-<table>
+<h2>📌 Offen</h2>
 
-<thead>
+<div id="taskOpen"></div>
 
-<tr>
+</div>
 
-<th>Titel</th>
-<th>Verantwortlich</th>
-<th>Fällig</th>
-<th>Priorität</th>
-<th>Status</th>
-<th width="70"></th>
+<div class="card">
 
-</tr>
+<h2>🚧 In Bearbeitung</h2>
 
-</thead>
+<div id="taskProgress"></div>
 
-<tbody id="taskTable"></tbody>
+</div>
 
-</table>
+<div class="card">
+
+<h2>✅ Erledigt</h2>
+
+<div id="taskDone"></div>
+
+</div>
 
 </div>
 
@@ -81,7 +86,9 @@ id="taskDate">
 <select id="taskPriority">
 
 <option>Niedrig</option>
+
 <option selected>Mittel</option>
+
 <option>Hoch</option>
 
 </select>
@@ -89,7 +96,9 @@ id="taskDate">
 <select id="taskStatus">
 
 <option selected>Offen</option>
+
 <option>In Bearbeitung</option>
+
 <option>Erledigt</option>
 
 </select>
@@ -132,79 +141,46 @@ onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
 
     loadPersons();
 
-    renderTasks(project);
+    renderKanban(project);
 
 }
 
 // =============================================
 
-function loadPersons(){
+function renderKanban(project){
 
-    const select=document.getElementById("taskPerson");
+    const open=document.getElementById("taskOpen");
+    const progress=document.getElementById("taskProgress");
+    const done=document.getElementById("taskDone");
 
-    select.innerHTML="";
-
-    contacts.forEach(person=>{
-
-        select.innerHTML+=`
-
-<option value="${person.name}">
-
-${person.name}
-
-</option>
-
-`;
-
-    });
-
-}
-
-// =============================================
-
-function renderTasks(project){
-
-    const table=document.getElementById("taskTable");
-
-    table.innerHTML="";
-
-    if(project.tasks.length===0){
-
-        table.innerHTML=`
-
-<tr>
-
-<td colspan="6">
-
-Noch keine Aufgaben vorhanden.
-
-</td>
-
-</tr>
-
-`;
-
-        return;
-
-    }
+    open.innerHTML="";
+    progress.innerHTML="";
+    done.innerHTML="";
 
     project.tasks.forEach((task,index)=>{
 
-        table.innerHTML+=`
+        const card=`
 
-<tr>
+<div class="card" style="margin-bottom:15px;">
 
-<td>${task.title}</td>
+<b>${task.title}</b>
 
-<td>${task.person || task.assigned || "-"}</td>
+<br><br>
 
-<td>${task.date || task.due || "-"}</td>
+👤 ${task.person || "-"}
 
-<td>${task.priority || "-"}</td>
+<br>
 
-<td>
+📅 ${task.date || "-"}
+
+<br>
+
+⚡ ${task.priority}
+
+<br><br>
 
 <select
+style="width:100%;"
 onchange="updateTaskStatus('${project.id}',${index},this.value)">
 
 <option value="Offen"
@@ -230,21 +206,55 @@ Erledigt
 
 </select>
 
-</td>
-
-<td>
+<br><br>
 
 <button
 class="btn btn-danger"
+style="width:100%;"
 onclick="deleteTask('${project.id}',${index})">
 
-🗑️
+🗑️ Löschen
 
 </button>
 
-</td>
+</div>
 
-</tr>
+`;
+
+        if(task.status==="Offen")
+
+            open.innerHTML+=card;
+
+        else if(task.status==="In Bearbeitung")
+
+            progress.innerHTML+=card;
+
+        else
+
+            done.innerHTML+=card;
+
+    });
+
+}
+// =============================================
+// Personen laden
+// =============================================
+
+function loadPersons(){
+
+    const select=document.getElementById("taskPerson");
+
+    select.innerHTML="";
+
+    contacts.forEach(person=>{
+
+        select.innerHTML+=`
+
+<option value="${person.name}">
+
+${person.name}
+
+</option>
 
 `;
 
@@ -272,9 +282,6 @@ function saveTask(projectId){
 
     const project=projects.find(p=>p.id===projectId);
 
-    if(!project.tasks)
-        project.tasks=[];
-
     project.tasks.push({
 
         id:crypto.randomUUID(),
@@ -293,23 +300,11 @@ function saveTask(projectId){
 
         priority:document.getElementById("taskPriority").value,
 
-        status:document.getElementById("taskStatus").value
+        status:document.getElementById("taskStatus").value,
+
+        created:new Date().toISOString()
 
     });
-
-    saveProjects();
-
-    showTasksPage(projectId);
-
-}
-
-// =============================================
-
-function deleteTask(projectId,index){
-
-    const project=projects.find(p=>p.id===projectId);
-
-    project.tasks.splice(index,1);
 
     saveProjects();
 
@@ -326,5 +321,75 @@ function updateTaskStatus(projectId,index,status){
     project.tasks[index].status=status;
 
     saveProjects();
+
+    renderKanban(project);
+
+}
+
+// =============================================
+
+function deleteTask(projectId,index){
+
+    if(!confirm("Aufgabe löschen?"))
+        return;
+
+    const project=projects.find(p=>p.id===projectId);
+
+    project.tasks.splice(index,1);
+
+    saveProjects();
+
+    renderKanban(project);
+
+}
+
+// =============================================
+// Globale Aufgabenübersicht
+// =============================================
+
+function showTasks(){
+
+    setPage(`
+
+<h1>✅ Alle Aufgaben</h1>
+
+<div class="cards" id="allTaskCards"></div>
+
+`);
+
+    const container=document.getElementById("allTaskCards");
+
+    projects.forEach(project=>{
+
+        const open=
+            project.tasks.filter(t=>t.status!=="Erledigt").length;
+
+        container.innerHTML+=`
+
+<div class="card">
+
+<h2>${project.number}</h2>
+
+<b>${project.name}</b>
+
+<br><br>
+
+🔥 ${open} offene Aufgaben
+
+<br><br>
+
+<button
+class="btn btn-primary"
+onclick="showTasksPage('${project.id}')">
+
+Projekt öffnen
+
+</button>
+
+</div>
+
+`;
+
+    });
 
 }
