@@ -49,7 +49,7 @@ const MeetingEditor = {
 
     render(){
 
-        let html = `
+    let html = `
 
 <h1>📅 Besprechung</h1>
 
@@ -86,11 +86,13 @@ value="${this.meeting.participants.join(", ")}">
 
 </div>
 
-<div id="meetingTopics">
-
-</div>
+<div id="meetingTopics"></div>
 
 <br>
+
+<div style="display:flex;gap:10px;justify-content:space-between;align-items:center;">
+
+<div>
 
 <button
 class="btn btn-primary"
@@ -108,7 +110,9 @@ onclick="MeetingModule.open('${this.project.id}')">
 
 </button>
 
-<div style="display:flex;gap:10px;justify-content:flex-end;">
+</div>
+
+<div>
 
 <button
 class="btn"
@@ -136,12 +140,15 @@ onclick="MeetingEditor.finish()">
 
 </div>
 
-💾 Speichern
-
-</button>
+</div>
 
 `;
 
+    setPage(html);
+
+    this.renderTopics();
+
+},
         setPage(html);
 
         this.renderTopics();
@@ -287,7 +294,7 @@ meeting.closedAt=new Date().toISOString();
 
    meeting.topics.forEach(topic => {
 
-    topic.notes.forEach(note => {
+    (topic.notes || []).forEach(note => {
 
         if (note.type !== "todo")
             return;
