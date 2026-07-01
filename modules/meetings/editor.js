@@ -1,7 +1,7 @@
 // =============================================
 // LumaFlow
 // Meeting Editor
-// Version 1.0
+// Version 2.0
 // =============================================
 
 const MeetingEditor = {
@@ -18,28 +18,22 @@ const MeetingEditor = {
         if (meetingIndex === null) {
 
             this.meeting = {
-
                 id: crypto.randomUUID(),
-
                 title: "",
-
-                date: new Date().toISOString().substring(0,10),
-
+                date: new Date().toISOString().substring(0, 10),
                 location: "",
-
                 participants: [],
-
                 topics: []
-
             };
 
         } else {
 
             this.meeting = JSON.parse(
-                JSON.stringify(
-                    this.project.meetings[meetingIndex]
-                )
+                JSON.stringify(this.project.meetings[meetingIndex])
             );
+
+            if (!this.meeting.topics)
+                this.meeting.topics = [];
 
         }
 
@@ -47,9 +41,9 @@ const MeetingEditor = {
 
     },
 
-    render(){
+    render() {
 
-    let html = `
+        let html = `
 
 <h1>📅 Besprechung</h1>
 
@@ -90,7 +84,7 @@ value="${this.meeting.participants.join(", ")}">
 
 <br>
 
-<div style="display:flex;gap:10px;justify-content:space-between;align-items:center;">
+<div style="display:flex;justify-content:space-between;align-items:center;">
 
 <div>
 
@@ -112,7 +106,7 @@ onclick="MeetingModule.open('${this.project.id}')">
 
 </div>
 
-<div>
+<div style="display:flex;gap:10px;">
 
 <button
 class="btn"
@@ -144,35 +138,28 @@ onclick="MeetingEditor.finish()">
 
 `;
 
-    setPage(html);
-
-    this.renderTopics();
-
-},
         setPage(html);
 
         this.renderTopics();
 
     },
 
-    renderTopics(){
+    renderTopics() {
 
-        const container =
-            document.getElementById("meetingTopics");
+        const container = document.getElementById("meetingTopics");
 
-        container.innerHTML="";
+        container.innerHTML = "";
 
-        this.meeting.topics.forEach((topic,index)=>{
+        this.meeting.topics.forEach((topic, index) => {
+
+            if (!topic.notes)
+                topic.notes = [];
 
             container.innerHTML += `
 
 <div class="card">
 
-<h2>
-
-TOP ${index+1}
-
-</h2>
+<h2>TOP ${index + 1}</h2>
 
 <input
 
@@ -186,13 +173,21 @@ style="width:100%;margin-bottom:15px;">
 
 <div id="notes_${index}"></div>
 
+<br>
+
 <button
-
 class="btn btn-primary"
-
 onclick="MeetingNotes.add(${index})">
 
 + Eintrag
+
+</button>
+
+<button
+class="btn btn-danger"
+onclick="MeetingEditor.removeTopic(${index})">
+
+TOP löschen
 
 </button>
 
@@ -204,17 +199,14 @@ onclick="MeetingNotes.add(${index})">
 
         });
 
-    },
-
-    addTopic(){
+    },    
+    addTopic() {
 
         this.meeting.topics.push({
 
-            id:crypto.randomUUID(),
-
-            title:"",
-
-            notes:[]
+            id: crypto.randomUUID(),
+            title: "",
+            notes: []
 
         });
 
@@ -222,124 +214,133 @@ onclick="MeetingNotes.add(${index})">
 
     },
 
-    updateTopic(index,value){
+    removeTopic(index) {
 
-        this.meeting.topics[index].title=value;
+        if (!confirm("TOP wirklich löschen?"))
+            return;
+
+        this.meeting.topics.splice(index, 1);
+
+        this.render();
 
     },
 
-    save(close = true){
+    updateTopic(index, value) {
 
-    this.meeting.title =
-        document.getElementById("meetingTitle").value;
+        this.meeting.topics[index].title = value;
 
-    this.meeting.date =
-        document.getElementById("meetingDate").value;
+    },
 
-    this.meeting.location =
-        document.getElementById("meetingLocation").value;
+    save(close = true) {
 
-    this.meeting.participants =
-        document.getElementById("meetingParticipants")
-        .value
-        .split(",")
-        .map(p => p.trim())
-        .filter(p => p !== "");
+        this.meeting.title =
+            document.getElementById("meetingTitle").value;
 
-    if(this.meetingIndex === null){
+        this.meeting.date =
+            document.getElementById("meetingDate").value;
 
-        this.project.meetings.push(this.meeting);
+        this.meeting.location =
+            document.getElementById("meetingLocation").value;
 
-        this.meetingIndex = this.project.meetings.length - 1;
+        this.meeting.participants =
+            document.getElementById("meetingParticipants")
+            .value
+            .split(",")
+            .map(p => p.trim())
+            .filter(p => p !== "");
 
-    }else{
+        if (!this.project.meetings)
+            this.project.meetings = [];
 
-        this.project.meetings[this.meetingIndex] = this.meeting;
+        if (this.meetingIndex === null) {
 
-    }
+            this.project.meetings.push(this.meeting);
+            this.meetingIndex = this.project.meetings.length - 1;
 
-    saveProjects();
+        } else {
 
-    if(close){
+            this.project.meetings[this.meetingIndex] = this.meeting;
+
+        }
+
+        saveProjects();
+
+        if (close) {
+
+            MeetingModule.open(this.project.id);
+
+        }
+
+    },
+
+    finish() {
+
+        this.save(false);
+
+        const meeting = this.project.meetings[this.meetingIndex];
+
+        if (meeting.status === "closed") {
+
+            alert("Diese Besprechung wurde bereits abgeschlossen.");
+            return;
+
+        }
+
+        meeting.status = "closed";
+        meeting.closedAt = new Date().toISOString();
+
+        if (!this.project.tasks)
+            this.project.tasks = [];
+
+        meeting.topics.forEach(topic => {
+
+            (topic.notes || []).forEach(note => {
+
+                if (note.type !== "todo")
+                    return;
+
+                const exists = this.project.tasks.some(task =>
+
+                    task.meeting === meeting.title &&
+                    task.title === note.title
+
+                );
+
+                if (exists)
+                    return;
+
+                this.project.tasks.push({
+
+                    id: crypto.randomUUID(),
+
+                    title: note.title,
+
+                    description: note.description,
+
+                    assigned: note.assigned,
+
+                    due: note.due,
+
+                    priority: note.priority,
+
+                    status: "Offen",
+
+                    meeting: meeting.title,
+
+                    topic: topic.title
+
+                });
+
+            });
+
+        });
+
+        saveProjects();
+
+        alert("Besprechung erfolgreich abgeschlossen.");
 
         MeetingModule.open(this.project.id);
 
     }
 
-},
-finish(){
-
-    this.save(false);
-
-    const meeting =
-        this.project.meetings[
-            this.meetingIndex===null
-                ? this.project.meetings.length-1
-                : this.meetingIndex
-        ];
-
-    if(meeting.status==="closed"){
-
-    alert("Diese Besprechung wurde bereits abgeschlossen.");
-
-    return;
-
-}
-
-meeting.status="closed";
-meeting.closedAt=new Date().toISOString();
-
-    if(!this.project.tasks)
-        this.project.tasks=[];
-
-   meeting.topics.forEach(topic => {
-
-    (topic.notes || []).forEach(note => {
-
-        if (note.type !== "todo")
-            return;
-
-        const exists = this.project.tasks.some(task =>
-
-            task.meeting === meeting.title &&
-            task.title === note.title
-
-        );
-
-        if (exists)
-            return;
-
-        this.project.tasks.push({
-
-            id: crypto.randomUUID(),
-
-            title: note.title,
-
-            description: note.description,
-
-            person: note.assigned,
-
-            date: note.due,
-
-            priority: note.priority,
-
-            status: "Offen",
-
-            meeting: meeting.title,
-
-            topic: topic.title
-
-        });
-
-    });
-
-});
-
-    saveProjects();
-
-    alert("Besprechung erfolgreich abgeschlossen.");
-
-    MeetingModule.open(this.project.id);
-
-}
 };
