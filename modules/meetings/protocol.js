@@ -1,7 +1,7 @@
 // =============================================
 // LumaFlow
 // Meeting Protocol
-// Version 1.0
+// Version 1.1
 // =============================================
 
 const MeetingProtocol = {
@@ -11,31 +11,38 @@ const MeetingProtocol = {
         let html = "";
 
         html += `
-        <div class="protocol">
 
-            <h1>${meeting.title}</h1>
+<div class="protocol">
 
-            <table class="protocol-header">
+<h1>${meeting.title}</h1>
 
-                <tr>
-                    <td><b>Datum</b></td>
-                    <td>${meeting.date}</td>
-                </tr>
+<table class="protocol-header">
 
-                <tr>
-                    <td><b>Ort</b></td>
-                    <td>${meeting.location}</td>
-                </tr>
+<tr>
+<td><b>Datum</b></td>
+<td>${meeting.date}</td>
+</tr>
 
-                <tr>
-                    <td><b>Teilnehmer</b></td>
-                    <td>${meeting.participants.join(", ")}</td>
-                </tr>
+<tr>
+<td><b>Ort</b></td>
+<td>${meeting.location || "-"}</td>
+</tr>
 
-            </table>
+<tr>
+<td><b>Teilnehmer</b></td>
+<td>${meeting.participants.join(", ")}</td>
+</tr>
 
-            <br>
-        `;
+<tr>
+<td><b>Erstellt</b></td>
+<td>${new Date().toLocaleString()}</td>
+</tr>
+
+</table>
+
+<hr>
+
+`;
 
         meeting.topics.forEach(topic=>{
 
@@ -53,145 +60,122 @@ const MeetingProtocol = {
 
         let html = `
 
-        <div class="protocol-topic">
+<h2>${topic.title}</h2>
 
-            <h2>${topic.title}</h2>
+`;
 
-        `;
-
-        //----------------------------------
-        // Informationen
-        //----------------------------------
-
-        const infos =
-            topic.notes.filter(n=>n.type==="info");
+        const infos=(topic.notes||[]).filter(n=>n.type==="info");
+        const decisions=(topic.notes||[]).filter(n=>n.type==="decision");
+        const todos=(topic.notes||[]).filter(n=>n.type==="todo");
+        const appointments=(topic.notes||[]).filter(n=>n.type==="appointment");
 
         if(infos.length){
 
-            html += "<h3>ℹ Informationen</h3><ul>";
+            html+="<h3>ℹ Informationen</h3><ul>";
 
             infos.forEach(note=>{
 
-                html += `<li>${note.title}</li>`;
+                html+=`<li>${note.title}</li>`;
 
             });
 
-            html += "</ul>";
+            html+="</ul>";
 
         }
-
-        //----------------------------------
-        // Beschlüsse
-        //----------------------------------
-
-        const decisions =
-            topic.notes.filter(n=>n.type==="decision");
 
         if(decisions.length){
 
-            html += "<h3>✔ Beschlüsse</h3><ul>";
+            html+="<h3>✔ Beschlüsse</h3><ul>";
 
             decisions.forEach(note=>{
 
-                html += `<li>${note.title}</li>`;
+                html+=`<li>${note.title}</li>`;
 
             });
 
-            html += "</ul>";
+            html+="</ul>";
 
         }
-
-        //----------------------------------
-        // Aufgaben
-        //----------------------------------
-
-        const todos =
-            topic.notes.filter(n=>n.type==="todo");
 
         if(todos.length){
 
-            html += `
+            html+=`
 
-            <h3>☑ Aufgaben</h3>
+<h3>☑ Aufgaben</h3>
 
-            <table class="protocol-table">
+<table>
 
-                <tr>
+<tr>
 
-                    <th>Aufgabe</th>
+<th>Aufgabe</th>
 
-                    <th>Verantwortlich</th>
+<th>Beschreibung</th>
 
-                    <th>Termin</th>
+<th>Verantwortlich</th>
 
-                    <th>Priorität</th>
+<th>Termin</th>
 
-                </tr>
+<th>Priorität</th>
 
-            `;
+<th>Status</th>
+
+</tr>
+
+`;
 
             todos.forEach(todo=>{
 
-                html += `
+                html+=`
 
-                <tr>
+<tr>
 
-                    <td>${todo.title}</td>
+<td>${todo.title}</td>
 
-                    <td>${todo.assigned}</td>
+<td>${todo.description || "-"}</td>
 
-                    <td>${todo.due}</td>
+<td>${todo.assigned || "-"}</td>
 
-                    <td>${todo.priority}</td>
+<td>${todo.due || "-"}</td>
 
-                </tr>
+<td>${todo.priority || "-"}</td>
 
-                `;
+<td>${todo.status || "Offen"}</td>
+
+</tr>
+
+`;
 
             });
 
-            html += "</table>";
+            html+="</table>";
 
         }
-
-        //----------------------------------
-        // Termine
-        //----------------------------------
-
-        const appointments =
-            topic.notes.filter(n=>n.type==="appointment");
 
         if(appointments.length){
 
-            html += "<h3>📅 Termine</h3><ul>";
+            html+="<h3>📅 Termine</h3><ul>";
 
             appointments.forEach(note=>{
 
-                html += `
+                html+=`
 
-                <li>
+<li>
 
-                    ${note.title}
+${note.title}
 
-                    ${note.due}
+${note.due ? "- "+note.due : ""}
 
-                </li>
+</li>
 
-                `;
+`;
 
             });
 
-            html += "</ul>";
+            html+="</ul>";
 
         }
 
-        html += `
-
-        <hr>
-
-        </div>
-
-        `;
+        html+="<hr>";
 
         return html;
 
@@ -199,83 +183,93 @@ const MeetingProtocol = {
 
     preview(){
 
-        const html =
-            this.create(MeetingEditor.meeting);
+        const html=this.create(MeetingEditor.meeting);
 
-        const win =
-            window.open("", "_blank");
+        const win=window.open("","_blank");
 
         win.document.write(`
 
-        <html>
+<html>
 
-        <head>
+<head>
 
-        <title>Protokoll</title>
+<title>Besprechungsprotokoll</title>
 
-        <style>
+<style>
 
-        body{
+body{
 
-            font-family:Segoe UI,Arial;
+font-family:Segoe UI,Arial;
 
-            padding:40px;
+padding:40px;
 
-            background:white;
+background:white;
 
-        }
+}
 
-        h1{
+h1{
 
-            color:#2c5cff;
+color:#2458ff;
 
-        }
+margin-bottom:30px;
 
-        table{
+}
 
-            border-collapse:collapse;
+h2{
 
-            width:100%;
+margin-top:35px;
 
-        }
+border-bottom:2px solid #ddd;
 
-        td,th{
+padding-bottom:8px;
 
-            border:1px solid #ddd;
+}
 
-            padding:8px;
+table{
 
-        }
+width:100%;
 
-        h2{
+border-collapse:collapse;
 
-            margin-top:40px;
+margin-bottom:20px;
 
-            border-bottom:2px solid #ddd;
+}
 
-            padding-bottom:10px;
+td,th{
 
-        }
+border:1px solid #ddd;
 
-        h3{
+padding:8px;
 
-            margin-top:25px;
+text-align:left;
 
-        }
+}
 
-        </style>
+th{
 
-        </head>
+background:#f3f3f3;
 
-        <body>
+}
 
-        ${html}
+hr{
 
-        </body>
+margin:35px 0;
 
-        </html>
+}
 
-        `);
+</style>
+
+</head>
+
+<body>
+
+${html}
+
+</body>
+
+</html>
+
+`);
 
     }
 
