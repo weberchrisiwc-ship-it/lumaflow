@@ -135,3 +135,85 @@ onclick="deleteDocument('${project.id}',${index})">
     });
 
 }
+// ---------------------------------
+// Dateien hochladen
+// ---------------------------------
+
+function uploadDocuments(projectId){
+
+    const project =
+        projects.find(p=>p.id===projectId);
+
+    const input =
+        document.getElementById("documentUpload");
+
+    if(input.files.length===0){
+
+        alert("Bitte Datei auswählen.");
+
+        return;
+
+    }
+
+    Array.from(input.files).forEach(file=>{
+
+        project.documents.push({
+
+            id: crypto.randomUUID(),
+
+            name: file.name,
+
+            size: formatFileSize(file.size),
+
+            type: file.name.split(".").pop().toUpperCase(),
+
+            date: new Date().toLocaleDateString("de-DE")
+
+        });
+
+    });
+
+    saveProjects();
+
+    showDocuments(projectId);
+
+}
+
+// ---------------------------------
+// Dokument löschen
+// ---------------------------------
+
+function deleteDocument(projectId,index){
+
+    if(!confirm("Dokument löschen?"))
+        return;
+
+    const project =
+        projects.find(p=>p.id===projectId);
+
+    project.documents.splice(index,1);
+
+    saveProjects();
+
+    showDocuments(projectId);
+
+}
+
+// ---------------------------------
+// Dateigröße
+// ---------------------------------
+
+function formatFileSize(bytes){
+
+    if(bytes<1024)
+        return bytes+" B";
+
+    if(bytes<1024*1024)
+        return (bytes/1024).toFixed(1)+" KB";
+
+    if(bytes<1024*1024*1024)
+        return (bytes/1024/1024).toFixed(1)+" MB";
+
+    return (bytes/1024/1024/1024).toFixed(1)+" GB";
+
+}
