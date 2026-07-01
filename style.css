@@ -791,3 +791,187 @@ body.dark .badge-danger{
     }
 
 }
+/* ===========================================
+   TOPBAR
+=========================================== */
+
+.topbar{
+
+    height:72px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.topbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex:1;
+
+}
+
+.topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.menu-btn{
+
+    width:44px;
+
+    height:44px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    box-shadow:var(--shadow);
+
+    font-size:18px;
+
+}
+
+.icon-btn{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    box-shadow:var(--shadow);
+
+    font-size:18px;
+
+}
+
+#globalSearch{
+
+    margin:0;
+
+    max-width:520px;
+
+    background:var(--surface);
+
+}
+
+.user-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:var(--surface);
+
+    padding:8px 16px;
+
+    border-radius:16px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.avatar{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    background:var(--accent);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:bold;
+
+    font-size:18px;
+
+}
+/* ==========================================
+   COLLAPSE SIDEBAR
+========================================== */
+
+.sidebar.collapsed{
+
+    width:78px;
+
+}
+
+.sidebar.collapsed .logo{
+
+    font-size:0;
+
+}
+
+.sidebar.collapsed .logo::before{
+
+    content:"💡";
+
+    font-size:28px;
+
+}
+
+.sidebar.collapsed button{
+
+    justify-content:center;
+
+    padding:14px;
+
+}
+
+.sidebar.collapsed button span:last-child{
+
+    display:none;
+
+}
+
+.sidebar.collapsed .sidebar-footer button span:last-child{
+
+    display:none;
+
+}
+
+.sidebar.collapsed hr{
+
+    margin:15px 0;
+
+}
