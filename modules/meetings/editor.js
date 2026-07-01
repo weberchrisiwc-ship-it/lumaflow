@@ -259,7 +259,7 @@ onclick="MeetingNotes.add(${index})">
 
     }
 
-}
+},
 finish(){
 
     this.save(false);
