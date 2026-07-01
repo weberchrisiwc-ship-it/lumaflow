@@ -1,6 +1,7 @@
-// ==============================
-// LumaFlow - Besprechungen
-// ==============================
+// =====================================
+// LumaFlow
+// Meetings
+// =====================================
 
 function showMeetingsPage(projectId){
 
@@ -39,11 +40,11 @@ onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
 
 `);
 
-renderMeetings(project);
+    renderMeetings(project);
 
 }
 
-// --------------------------------
+// =====================================
 
 function renderMeetings(project){
 
@@ -51,7 +52,7 @@ function renderMeetings(project){
 
     list.innerHTML="";
 
-    if(project.meetings.length==0){
+    if(project.meetings.length===0){
 
         list.innerHTML=`
 
@@ -73,22 +74,16 @@ Noch keine Besprechungen vorhanden.
 
 <div class="card">
 
-<h2>
+<h2>${meeting.title}</h2>
 
-${meeting.title}
+<p>📅 ${meeting.date}</p>
 
-</h2>
-
-<p>
-
-📅 ${meeting.date}
-
-</p>
+<p>📍 ${meeting.location || "-"}</p>
 
 <br>
 
-<button class="btn btn-primary"
-
+<button
+class="btn btn-primary"
 onclick="openMeeting('${project.id}',${index})">
 
 Öffnen
@@ -103,96 +98,18 @@ onclick="openMeeting('${project.id}',${index})">
 
 }
 
-// --------------------------------
+// =====================================
 
 function newMeeting(projectId){
 
-    const project=projects.find(p=>p.id===projectId);
-
-    const title=prompt("Titel der Besprechung");
-
-    if(!title) return;
-
-    project.meetings.push({
-
-        title:title,
-
-        date:new Date().toLocaleDateString(),
-
-        notes:""
-
-    });
-
-    saveProjects();
-
-    showMeetingsPage(projectId);
+    openMeetingEditor(projectId);
 
 }
 
-// --------------------------------
+// =====================================
 
 function openMeeting(projectId,index){
 
-    const project=projects.find(p=>p.id===projectId);
-
-    const meeting=project.meetings[index];
-
-    setPage(`
-
-<h1>${meeting.title}</h1>
-
-<p>
-
-${meeting.date}
-
-</p>
-
-<br>
-
-<div class="card">
-
-<textarea
-
-id="meetingNotes"
-
-style="width:100%;height:400px;border:none;font-size:16px;resize:none;outline:none;"
-
-placeholder="Hier einfach mitschreiben...">${meeting.notes}</textarea>
-
-</div>
-
-<br>
-
-<button class="btn btn-primary"
-
-onclick="saveMeeting('${project.id}',${index})">
-
-💾 Speichern
-
-</button>
-
-<button class="btn"
-
-onclick="showMeetingsPage('${project.id}')">
-
-Zurück
-
-</button>
-
-`);
-
-}
-
-// --------------------------------
-
-function saveMeeting(projectId,index){
-
-    const project=projects.find(p=>p.id===projectId);
-
-    project.meetings[index].notes=document.getElementById("meetingNotes").value;
-
-    saveProjects();
-
-    alert("Besprechung gespeichert.");
+    openMeetingEditor(projectId,index);
 
 }
