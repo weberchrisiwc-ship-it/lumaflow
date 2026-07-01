@@ -70,9 +70,53 @@ Dunkel
 
 <label>Akzentfarbe</label>
 
-<input
+<select
+id="accentSelect"
+onchange="changeAccent(this.value)">
 
-type="color"
+<option value="#2450d3"
+${settings.accent=="#2450d3"?"selected":""}>
+
+🔵 LumaFlow Blau
+
+</option>
+
+<option value="#16a34a"
+${settings.accent=="#16a34a"?"selected":""}>
+
+🟢 Grün
+
+</option>
+
+<option value="#9333ea"
+${settings.accent=="#9333ea"?"selected":""}>
+
+🟣 Violett
+
+</option>
+
+<option value="#ea580c"
+${settings.accent=="#ea580c"?"selected":""}>
+
+🟠 Orange
+
+</option>
+
+<option value="#dc2626"
+${settings.accent=="#dc2626"?"selected":""}>
+
+🔴 Rot
+
+</option>
+
+<option value="#111827"
+${settings.accent=="#111827"?"selected":""}>
+
+⚫ Anthrazit
+
+</option>
+
+</select>
 
 value="${settings.accent}"
 
