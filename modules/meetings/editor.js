@@ -108,10 +108,33 @@ onclick="MeetingModule.open('${this.project.id}')">
 
 </button>
 
+<div style="display:flex;gap:10px;justify-content:flex-end;">
+
+<button
+class="btn"
+onclick="MeetingProtocol.preview()">
+
+👁 Vorschau
+
+</button>
+
 <button
 class="btn btn-primary"
-style="float:right"
 onclick="MeetingEditor.save()">
+
+💾 Speichern
+
+</button>
+
+<button
+class="btn btn-success"
+onclick="MeetingEditor.finish()">
+
+✅ Abschließen
+
+</button>
+
+</div>
 
 💾 Speichern
 
@@ -198,36 +221,99 @@ onclick="MeetingNotes.add(${index})">
 
     },
 
-    save(){
+    save(close = true){
 
-        this.meeting.title=
-            document.getElementById("meetingTitle").value;
+    this.meeting.title =
+        document.getElementById("meetingTitle").value;
 
-        this.meeting.date=
-            document.getElementById("meetingDate").value;
+    this.meeting.date =
+        document.getElementById("meetingDate").value;
 
-        this.meeting.location=
-            document.getElementById("meetingLocation").value;
+    this.meeting.location =
+        document.getElementById("meetingLocation").value;
 
-        this.meeting.participants=
-            document.getElementById("meetingParticipants")
-            .value
-            .split(",");
+    this.meeting.participants =
+        document.getElementById("meetingParticipants")
+        .value
+        .split(",")
+        .map(p => p.trim())
+        .filter(p => p !== "");
 
-        if(this.meetingIndex===null){
+    if(this.meetingIndex === null){
 
-            this.project.meetings.push(this.meeting);
+        this.project.meetings.push(this.meeting);
 
-        }else{
+        this.meetingIndex = this.project.meetings.length - 1;
 
-            this.project.meetings[this.meetingIndex]=this.meeting;
+    }else{
 
-        }
+        this.project.meetings[this.meetingIndex] = this.meeting;
 
-        saveProjects();
+    }
+
+    saveProjects();
+
+    if(close){
 
         MeetingModule.open(this.project.id);
 
     }
 
+}
+finish(){
+
+    this.save(false);
+
+    const meeting =
+        this.project.meetings[
+            this.meetingIndex===null
+                ? this.project.meetings.length-1
+                : this.meetingIndex
+        ];
+
+    meeting.status="closed";
+
+    if(!this.project.tasks)
+        this.project.tasks=[];
+
+    meeting.topics.forEach(topic=>{
+
+        topic.notes.forEach(note=>{
+
+            if(note.type!=="todo")
+                return;
+
+            this.project.tasks.push({
+
+                id:crypto.randomUUID(),
+
+                title:note.title,
+
+                description:note.description,
+
+                person:note.assigned,
+
+                date:note.due,
+
+                priority:note.priority,
+
+                status:"Offen",
+
+                meeting:meeting.title,
+
+                topic:topic.title
+
+            });
+
+        });
+
+    });
+
+    saveProjects();
+
+    alert("Besprechung erfolgreich abgeschlossen.");
+
+    MeetingModule.open(this.project.id);
+
+}
 };
