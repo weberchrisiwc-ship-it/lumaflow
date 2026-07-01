@@ -285,38 +285,48 @@ meeting.closedAt=new Date().toISOString();
     if(!this.project.tasks)
         this.project.tasks=[];
 
-    meeting.topics.forEach(topic=>{
+   meeting.topics.forEach(topic => {
 
-        topic.notes.forEach(note=>{
+    topic.notes.forEach(note => {
 
-            if(note.type!=="todo")
-                return;
+        if (note.type !== "todo")
+            return;
 
-            this.project.tasks.push({
+        const exists = this.project.tasks.some(task =>
 
-                id:crypto.randomUUID(),
+            task.meeting === meeting.title &&
+            task.title === note.title
 
-                title:note.title,
+        );
 
-                description:note.description,
+        if (exists)
+            return;
 
-                person:note.assigned,
+        this.project.tasks.push({
 
-                date:note.due,
+            id: crypto.randomUUID(),
 
-                priority:note.priority,
+            title: note.title,
 
-                status:"Offen",
+            description: note.description,
 
-                meeting:meeting.title,
+            person: note.assigned,
 
-                topic:topic.title
+            date: note.due,
 
-            });
+            priority: note.priority,
+
+            status: "Offen",
+
+            meeting: meeting.title,
+
+            topic: topic.title
 
         });
 
     });
+
+});
 
     saveProjects();
 
