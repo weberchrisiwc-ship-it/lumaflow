@@ -132,17 +132,31 @@ style="width:100%;height:90px;margin-bottom:10px;"
 
 >${note.description}</textarea>
 
-<input
+<select
 
-placeholder="Verantwortlich"
+style="width:100%;margin-bottom:10px;"
 
-value="${note.assigned}"
-
-oninput="
+onchange="
 MeetingNotes.update(${topicIndex},${noteIndex},'assigned',this.value)
-"
+">
 
-style="width:100%;margin-bottom:10px;">
+<option value="">-- Verantwortlich --</option>
+
+${contacts.map(person=>`
+
+<option
+
+value="${person.name}"
+
+${note.assigned===person.name ? "selected" : ""}>
+
+${person.name}
+
+</option>
+
+`).join("")}
+
+</select>
 
 <input
 
