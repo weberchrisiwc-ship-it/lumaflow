@@ -555,7 +555,8 @@ onclick="showTasksPage('${p.id}')">
 <h1>${p.protocols.length}</h1>
 
 <button
-class="btn">
+class="btn btn-primary"
+onclick="showDocuments('${p.id}')">
 
 Öffnen
 
