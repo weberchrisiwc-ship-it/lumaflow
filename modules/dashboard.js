@@ -1,50 +1,97 @@
 // =============================================
-// LumaFlow Dashboard
-// Version 2.0
+// LumaFlow Dashboard 3.0
 // =============================================
 
 function showDashboard(){
 
+    const totalProjects = projects.length;
+
     let totalTasks = 0;
     let openTasks = 0;
-    let meetings = 0;
-    let protocols = 0;
+    let totalMeetings = 0;
+    let totalProtocols = 0;
+
+    const today =
+        new Date().toISOString().substring(0,10);
+
+    let todayItems = "";
 
     projects.forEach(project=>{
 
-        if(project.tasks){
+        totalMeetings += project.meetings.length;
+        totalProtocols += project.protocols.length;
+        totalTasks += project.tasks.length;
 
-            totalTasks += project.tasks.length;
+        project.tasks.forEach(task=>{
 
-            openTasks += project.tasks.filter(task=>
+            if(task.status!=="Erledigt")
+                openTasks++;
 
-                task.status !== "Erledigt"
+            if(task.date===today){
 
-            ).length;
+                todayItems += `
 
-        }
+<div class="card">
 
-        if(project.meetings){
+<b>✅ ${task.title}</b>
 
-            meetings += project.meetings.length;
+<br>
 
-            protocols += project.meetings.filter(m=>
+${project.number}
 
-                m.status==="closed"
+</div>
 
-            ).length;
+`;
 
-        }
+            }
+
+        });
+
+        project.meetings.forEach(meeting=>{
+
+            if(meeting.date===today){
+
+                todayItems += `
+
+<div class="card">
+
+<b>📅 ${meeting.title}</b>
+
+<br>
+
+${project.number}
+
+</div>
+
+`;
+
+            }
+
+        });
 
     });
 
+    if(todayItems===""){
+
+        todayItems=`
+
+<div class="card">
+
+Heute stehen keine Termine an.
+
+</div>
+
+`;
+
+    }
+
     setPage(`
 
-<h1>👋 Willkommen zurück</h1>
+<h1>Dashboard</h1>
 
-<p style="margin-bottom:30px;color:#666;">
+<p>
 
-Hier ist dein aktueller Projektstatus.
+Willkommen bei LumaFlow.
 
 </p>
 
@@ -54,19 +101,15 @@ Hier ist dein aktueller Projektstatus.
 
 <h3>📁 Projekte</h3>
 
-<h1>${projects.length}</h1>
-
-<p>Aktive Projekte</p>
+<h1>${totalProjects}</h1>
 
 </div>
 
 <div class="card">
 
-<h3>✅ Offene Aufgaben</h3>
+<h3>🔥 Offene Aufgaben</h3>
 
 <h1>${openTasks}</h1>
-
-<p>von ${totalTasks} Aufgaben</p>
 
 </div>
 
@@ -74,9 +117,7 @@ Hier ist dein aktueller Projektstatus.
 
 <h3>📅 Besprechungen</h3>
 
-<h1>${meetings}</h1>
-
-<p>Gesamte Meetings</p>
+<h1>${totalMeetings}</h1>
 
 </div>
 
@@ -84,9 +125,7 @@ Hier ist dein aktueller Projektstatus.
 
 <h3>📄 Protokolle</h3>
 
-<h1>${protocols}</h1>
-
-<p>Abgeschlossen</p>
+<h1>${totalProtocols}</h1>
 
 </div>
 
@@ -96,42 +135,11 @@ Hier ist dein aktueller Projektstatus.
 
 <div class="card">
 
-<h2>⚡ Schnellzugriff</h2>
+<h2>📅 Heute</h2>
 
-<br>
+<div id="todayList">
 
-<button class="btn btn-primary"
-onclick="showProjects()">
-
-📁 Projekte öffnen
-
-</button>
-
-<br><br>
-
-<button class="btn btn-primary"
-onclick="showTasks()">
-
-✅ Aufgaben öffnen
-
-</button>
-
-<br><br>
-
-<button class="btn btn-primary"
-onclick="showMeetings()">
-
-📅 Besprechungen öffnen
-
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>📊 Projektübersicht</h2>
-
-<div id="dashboardProjects"></div>
+${todayItems}
 
 </div>
 
@@ -139,168 +147,137 @@ onclick="showMeetings()">
 
 <div class="card">
 
-<h2>🔥 Offene Aufgaben</h2>
+<h2>📁 Projekte</h2>
 
-<div id="dashboardTasks"></div>
+<div id="projectOverview">
+
+</div>
+
+</div>
 
 </div>
 
 `);
 
-    const projectList =
-        document.getElementById("dashboardProjects");
+    renderDashboardProjects();
+
+}
+// =============================================
+// Dashboard Projekte
+// =============================================
+
+function renderDashboardProjects(){
+
+    const container =
+        document.getElementById("projectOverview");
+
+    container.innerHTML="";
 
     if(projects.length===0){
 
-        projectList.innerHTML="<p>Noch keine Projekte.</p>";
+        container.innerHTML=`
 
-    }else{
+<div class="card">
 
-        projects.forEach(project=>{
+Noch keine Projekte vorhanden.
 
-            projectList.innerHTML+=`
+</div>
+
+`;
+
+        return;
+
+    }
+
+    projects.forEach((project,index)=>{
+
+        const totalTasks =
+            project.tasks.length;
+
+        const openTasks =
+            project.tasks.filter(t=>t.status!=="Erledigt").length;
+
+        const progress =
+            totalTasks===0
+            ?0
+            :Math.round(((totalTasks-openTasks)/totalTasks)*100);
+
+        container.innerHTML+=`
+
+<div class="card">
 
 <div style="
 display:flex;
 justify-content:space-between;
-padding:12px 0;
-border-bottom:1px solid #eee;">
+align-items:center;">
 
 <div>
 
-<strong>${project.number}</strong>
+<b>${project.number}</b>
 
 <br>
 
-<span style="color:#777;">
-
 ${project.name}
-
-</span>
 
 </div>
 
 <div>
 
-${project.tasks ? project.tasks.length : 0}
-
-Aufgaben
+${project.status}
 
 </div>
 
 </div>
 
-`;
+<br>
 
-        });
+<div style="
+height:8px;
+background:#e8edf5;
+border-radius:8px;
+overflow:hidden;">
 
-    }
-    
-    const taskList =
-        document.getElementById("dashboardTasks");
+<div style="
+height:8px;
+width:${progress}%;
+background:#2450d3;">
 
-    let hasTasks = false;
+</div>
 
-    projects.forEach(project=>{
+</div>
 
-        if(!project.tasks)
-            return;
+<p style="margin-top:10px;">
 
-        project.tasks
-            .filter(task=>task.status!=="Erledigt")
-            .slice(0,8)
-            .forEach(task=>{
+${progress}% abgeschlossen
 
-                hasTasks = true;
-
-                let color = "#f59e0b";
-
-                if(task.priority==="Hoch")
-                    color="#ef4444";
-
-                if(task.priority==="Niedrig")
-                    color="#10b981";
-
-                taskList.innerHTML += `
+</p>
 
 <div style="
 display:flex;
 justify-content:space-between;
-align-items:center;
-padding:14px 0;
-border-bottom:1px solid #ececec;">
+margin-top:15px;">
 
-<div>
+<span>🔥 ${openTasks} offen</span>
 
-<div style="font-weight:600;">
-
-${task.title}
+<span>📅 ${project.meetings.length}</span>
 
 </div>
 
-<div style="
-font-size:13px;
-color:#777;
-margin-top:4px;">
+<br>
 
-📁 ${project.number}
-&nbsp;&nbsp;
+<button
+class="btn btn-primary"
+style="width:100%;"
+onclick="openProject(${index})">
 
-👤 ${task.person || "-"}
+Projekt öffnen
 
-</div>
-
-</div>
-
-<div style="text-align:right;">
-
-<div style="
-display:inline-block;
-padding:5px 10px;
-border-radius:20px;
-background:${color};
-color:white;
-font-size:12px;">
-
-${task.priority || "-"}
-
-</div>
-
-<br><br>
-
-<div style="
-font-size:13px;
-color:#777;">
-
-${task.date || "-"}
-
-</div>
-
-</div>
+</button>
 
 </div>
 
 `;
-
-            });
 
     });
-
-    if(!hasTasks){
-
-        taskList.innerHTML = `
-
-<div style="
-padding:30px;
-text-align:center;
-color:#777;">
-
-🎉 Keine offenen Aufgaben.
-
-</div>
-
-`;
-
-    }
 
 }
