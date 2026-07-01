@@ -1,69 +1,135 @@
-/* ===========================
-   GRUNDEINSTELLUNGEN
-=========================== */
+/* ==========================================================
+   LumaFlow UI 3.0
+   style.css - Teil 1/2
+========================================================== */
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI,Arial,sans-serif;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+:root{
+
+    --primary:#2450d3;
+    --primary-hover:#183ea9;
+
+    --background:#f5f7fb;
+    --surface:#ffffff;
+
+    --border:#e5e7eb;
+
+    --text:#1f2937;
+    --text-light:#6b7280;
+
+    --success:#2ea44f;
+    --warning:#d97706;
+    --danger:#dc2626;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,.08);
+
+    --radius:14px;
+
 }
 
 body{
-    background:#eef2f7;
-    color:#222;
+
+    background:var(--background);
+    color:var(--text);
+
 }
 
-/* ===========================
+/* ==========================================================
    LAYOUT
-=========================== */
+========================================================== */
 
 .app{
+
     display:flex;
-    height:100vh;
+
+    min-height:100vh;
+
 }
 
-/* ===========================
+/* ==========================================================
    SIDEBAR
-=========================== */
+========================================================== */
 
 .sidebar{
-    width:240px;
-    background:#2450d3;
+
+    width:250px;
+
+    background:linear-gradient(
+        180deg,
+        #2450d3 0%,
+        #1d46bf 100%
+    );
+
     color:white;
+
     display:flex;
+
     flex-direction:column;
-    padding:25px 18px;
+
+    padding:28px 18px;
+
+    box-shadow:
+
+        8px 0 30px rgba(0,0,0,.08);
+
 }
 
 .logo{
-    font-size:30px;
-    font-weight:bold;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
     margin-bottom:40px;
+
+    padding-left:6px;
+
 }
 
 .sidebar nav{
+
     display:flex;
+
     flex-direction:column;
+
     gap:8px;
+
 }
 
 .sidebar button{
 
-    background:none;
-    border:none;
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    width:100%;
+
+    padding:14px 16px;
+
+    background:transparent;
 
     color:white;
 
+    border:none;
+
+    border-radius:12px;
+
     text-align:left;
-
-    padding:14px;
-
-    border-radius:10px;
 
     cursor:pointer;
 
-    font-size:16px;
+    font-size:15px;
 
     transition:.2s;
 
@@ -71,39 +137,87 @@ body{
 
 .sidebar button:hover{
 
-    background:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.15);
+
+    transform:translateX(4px);
 
 }
 
-/* ===========================
+.sidebar button.active{
+
+    background:white;
+
+    color:var(--primary);
+
+    font-weight:600;
+
+}
+
+.sidebar hr{
+
+    border:none;
+
+    border-top:1px solid rgba(255,255,255,.18);
+
+    margin:20px 0;
+
+}
+
+.sidebar-footer{
+
+    margin-top:auto;
+
+}
+
+/* ==========================================================
    CONTENT
-=========================== */
+========================================================== */
 
 .content{
 
     flex:1;
 
-    padding:35px;
+    padding:40px;
 
     overflow:auto;
 
 }
 
-/* ===========================
-   KARTEN
-=========================== */
+.content h1{
+
+    font-size:34px;
+
+    margin-bottom:8px;
+
+}
+
+.content h2{
+
+    margin-bottom:20px;
+
+    color:var(--text-light);
+
+    font-weight:500;
+
+}
+
+/* ==========================================================
+   CARDS
+========================================================== */
 
 .card{
 
-    background:white;
+    background:var(--surface);
 
-    border-radius:14px;
+    border-radius:var(--radius);
 
-    padding:25px;
+    padding:24px;
 
-    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    margin-bottom:22px;
 
-    margin-bottom:20px;
+    box-shadow:var(--shadow);
+
+    border:1px solid rgba(0,0,0,.03);
 
 }
 
@@ -111,35 +225,61 @@ body{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:
 
-    gap:20px;
+        repeat(auto-fit,minmax(240px,1fr));
 
-    margin:25px 0;
+    gap:22px;
 
 }
 
-/* ===========================
+.card h2{
+
+    margin-bottom:16px;
+
+    color:var(--text);
+
+}
+
+.card p{
+
+    color:var(--text-light);
+
+    line-height:1.5;
+
+}
+
+/* ==========================================================
    BUTTONS
-=========================== */
+========================================================== */
 
 .btn{
 
     border:none;
 
-    cursor:pointer;
+    border-radius:10px;
 
     padding:12px 18px;
 
-    border-radius:8px;
+    cursor:pointer;
 
-    font-size:15px;
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:.2s;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-1px);
 
 }
 
 .btn-primary{
 
-    background:#2450d3;
+    background:var(--primary);
 
     color:white;
 
@@ -147,21 +287,103 @@ body{
 
 .btn-primary:hover{
 
-    background:#173ca7;
+    background:var(--primary-hover);
 
 }
 
 .btn-danger{
 
-    background:#d92d2d;
+    background:var(--danger);
 
     color:white;
 
 }
 
-/* ===========================
+.btn-danger:hover{
+
+    filter:brightness(.95);
+
+}
+
+.btn-success{
+
+    background:var(--success);
+
+    color:white;
+
+}
+
+.btn-success:hover{
+
+    filter:brightness(.95);
+
+}
+/* ==========================================================
+   LumaFlow UI 3.0
+   style.css - Teil 2/2
+========================================================== */
+
+/* ==========================================================
+   FORMULARE
+========================================================== */
+
+label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:12px 14px;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    background:white;
+
+    transition:.2s;
+
+    margin-bottom:15px;
+
+}
+
+textarea{
+
+    resize:vertical;
+
+    min-height:100px;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 3px rgba(36,80,211,.12);
+
+}
+
+/* ==========================================================
    TABELLEN
-=========================== */
+========================================================== */
 
 table{
 
@@ -171,41 +393,67 @@ table{
 
 }
 
+thead{
+
+    background:#f8fafc;
+
+}
+
 th{
 
     text-align:left;
 
-    padding:14px;
+    padding:14px 16px;
 
-    border-bottom:2px solid #ddd;
+    font-weight:600;
+
+    color:var(--text);
+
+    border-bottom:1px solid var(--border);
 
 }
 
 td{
 
-    padding:14px;
+    padding:14px 16px;
 
-    border-bottom:1px solid #eee;
+    border-bottom:1px solid #edf0f4;
+
+    vertical-align:middle;
 
 }
 
-/* ===========================
+tbody tr{
+
+    transition:.15s;
+
+}
+
+tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+/* ==========================================================
    MODAL
-=========================== */
+========================================================== */
 
 .modal{
-
-    display:none;
 
     position:fixed;
 
     inset:0;
 
-    background:rgba(0,0,0,.45);
+    display:none;
 
     justify-content:center;
 
     align-items:center;
+
+    background:rgba(15,23,42,.45);
+
+    backdrop-filter:blur(4px);
 
     z-index:999;
 
@@ -213,38 +461,23 @@ td{
 
 .modal-content{
 
+    width:620px;
+
+    max-width:92%;
+
     background:white;
 
-    width:500px;
+    border-radius:18px;
 
-    max-width:90%;
+    padding:30px;
 
-    border-radius:14px;
-
-    padding:25px;
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
 
 }
 
 .modal-content h2{
 
     margin-bottom:20px;
-
-}
-
-.modal-content input,
-.modal-content select{
-
-    width:100%;
-
-    padding:12px;
-
-    margin-bottom:15px;
-
-    border:1px solid #ccc;
-
-    border-radius:8px;
-
-    font-size:15px;
 
 }
 
@@ -256,9 +489,188 @@ td{
 
     gap:10px;
 
+    margin-top:15px;
+
 }
 
-textarea{
-    resize:vertical;
-    font-family:inherit;
+/* ==========================================================
+   PROTOKOLL
+========================================================== */
+
+.protocol{
+
+    max-width:1000px;
+
+    margin:auto;
+
+}
+
+.protocol-header{
+
+    margin-top:20px;
+
+    margin-bottom:30px;
+
+}
+
+.protocol h2{
+
+    margin-top:35px;
+
+    margin-bottom:15px;
+
+    padding-bottom:8px;
+
+    border-bottom:2px solid #edf0f4;
+
+}
+
+.protocol h3{
+
+    margin:20px 0 10px;
+
+}
+
+/* ==========================================================
+   BADGES
+========================================================== */
+
+.badge{
+
+    display:inline-block;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.badge-success{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+.badge-warning{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+.badge-danger{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+    height:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#eef2f7;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#c8d1df;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#aeb9ca;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:1100px){
+
+    .sidebar{
+
+        width:82px;
+
+        padding:20px 12px;
+
+    }
+
+    .logo{
+
+        font-size:18px;
+
+        text-align:center;
+
+    }
+
+    .sidebar button{
+
+        justify-content:center;
+
+        padding:14px;
+
+        font-size:0;
+
+    }
+
+    .content{
+
+        padding:22px;
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .content{
+
+        padding:16px;
+
+    }
+
+    .card{
+
+        padding:18px;
+
+    }
+
+    .modal-content{
+
+        width:95%;
+
+        padding:20px;
+
+    }
+
 }
