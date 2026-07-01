@@ -1,7 +1,7 @@
 // =============================================
 // LumaFlow
 // Meeting Editor
-// Version 2.0
+// Version 3.0
 // =============================================
 
 const MeetingEditor = {
@@ -20,9 +20,10 @@ const MeetingEditor = {
             this.meeting = {
                 id: crypto.randomUUID(),
                 title: "",
-                date: new Date().toISOString().substring(0, 10),
+                date: new Date().toISOString().substring(0,10),
                 location: "",
                 participants: [],
+                quickNotes: "",
                 topics: []
             };
 
@@ -32,8 +33,11 @@ const MeetingEditor = {
                 JSON.stringify(this.project.meetings[meetingIndex])
             );
 
-            if (!this.meeting.topics)
-                this.meeting.topics = [];
+            if(!this.meeting.topics)
+                this.meeting.topics=[];
+
+            if(!this.meeting.quickNotes)
+                this.meeting.quickNotes="";
 
         }
 
@@ -41,9 +45,9 @@ const MeetingEditor = {
 
     },
 
-    render() {
+    render(){
 
-        let html = `
+        let html=`
 
 <h1>📅 Besprechung</h1>
 
@@ -77,6 +81,53 @@ style="width:100%;margin-bottom:15px;">
 id="meetingParticipants"
 placeholder="Christoph, Martin ..."
 value="${this.meeting.participants.join(", ")}">
+
+</div>
+
+<div class="card">
+
+<h2>📝 Besprechungsnotizen</h2>
+
+<p style="color:#777;margin-bottom:15px;">
+
+Einfach alles mitschreiben. Die Struktur kommt danach.
+
+</p>
+
+<textarea
+
+id="meetingQuickNotes"
+
+style="
+width:100%;
+height:240px;
+resize:vertical;
+"
+
+placeholder="Einfach schreiben...
+
+Der Bauherr möchte RGB.
+
+Christoph prüft Bemusterung.
+
+Variante B beschlossen.
+
+Jour Fixe am 15.08.
+"
+
+>${this.meeting.quickNotes}</textarea>
+
+<br><br>
+
+<button
+
+class="btn btn-primary"
+
+onclick="MeetingEditor.parseQuickNotes()">
+
+🪄 Notizen strukturieren
+
+</button>
 
 </div>
 
@@ -144,22 +195,22 @@ onclick="MeetingEditor.finish()">
 
     },
 
-    renderTopics() {
+    renderTopics(){
 
-        const container = document.getElementById("meetingTopics");
+        const container=document.getElementById("meetingTopics");
 
-        container.innerHTML = "";
+        container.innerHTML="";
 
-        this.meeting.topics.forEach((topic, index) => {
+        this.meeting.topics.forEach((topic,index)=>{
 
-            if (!topic.notes)
-                topic.notes = [];
+            if(!topic.notes)
+                topic.notes=[];
 
-            container.innerHTML += `
+            container.innerHTML+=`
 
 <div class="card">
 
-<h2>TOP ${index + 1}</h2>
+<h2>TOP ${index+1}</h2>
 
 <input
 
@@ -199,8 +250,8 @@ TOP löschen
 
         });
 
-    },    
-    addTopic() {
+    },
+        addTopic(){
 
         this.meeting.topics.push({
 
@@ -214,58 +265,62 @@ TOP löschen
 
     },
 
-    removeTopic(index) {
+    removeTopic(index){
 
-        if (!confirm("TOP wirklich löschen?"))
+        if(!confirm("TOP wirklich löschen?"))
             return;
 
-        this.meeting.topics.splice(index, 1);
+        this.meeting.topics.splice(index,1);
 
         this.render();
 
     },
 
-    updateTopic(index, value) {
+    updateTopic(index,value){
 
-        this.meeting.topics[index].title = value;
+        this.meeting.topics[index].title=value;
 
     },
 
-    save(close = true) {
+    save(close=true){
 
-        this.meeting.title =
+        this.meeting.title=
             document.getElementById("meetingTitle").value;
 
-        this.meeting.date =
+        this.meeting.date=
             document.getElementById("meetingDate").value;
 
-        this.meeting.location =
+        this.meeting.location=
             document.getElementById("meetingLocation").value;
 
-        this.meeting.participants =
+        this.meeting.quickNotes=
+            document.getElementById("meetingQuickNotes").value;
+
+        this.meeting.participants=
             document.getElementById("meetingParticipants")
             .value
             .split(",")
-            .map(p => p.trim())
-            .filter(p => p !== "");
+            .map(p=>p.trim())
+            .filter(p=>p!="");
 
-        if (!this.project.meetings)
-            this.project.meetings = [];
+        if(!this.project.meetings)
+            this.project.meetings=[];
 
-        if (this.meetingIndex === null) {
+        if(this.meetingIndex===null){
 
             this.project.meetings.push(this.meeting);
-            this.meetingIndex = this.project.meetings.length - 1;
 
-        } else {
+            this.meetingIndex=this.project.meetings.length-1;
 
-            this.project.meetings[this.meetingIndex] = this.meeting;
+        }else{
+
+            this.project.meetings[this.meetingIndex]=this.meeting;
 
         }
 
         saveProjects();
 
-        if (close) {
+        if(close){
 
             MeetingModule.open(this.project.id);
 
@@ -273,83 +328,93 @@ TOP löschen
 
     },
 
-    finish() {
+    parseQuickNotes(){
 
-    this.save(false);
+        this.meeting.quickNotes=
+            document.getElementById("meetingQuickNotes").value;
 
-    const meeting = this.project.meetings[this.meetingIndex];
+        alert("🚧 Der intelligente Parser kommt als Nächstes.");
 
-    if (meeting.status === "closed") {
+    },
 
-        alert("Diese Besprechung wurde bereits abgeschlossen.");
-        return;
+    finish(){
 
-    }
+        this.save(false);
 
-    meeting.status = "closed";
-    meeting.closedAt = new Date().toISOString();
+        const meeting=this.project.meetings[this.meetingIndex];
 
-    if (!this.project.tasks)
-        this.project.tasks = [];
+        if(meeting.status==="closed"){
 
-    meeting.topics.forEach(topic => {
+            alert("Diese Besprechung wurde bereits abgeschlossen.");
 
-        (topic.notes || []).forEach(note => {
+            return;
 
-            if (note.type !== "todo")
-                return;
+        }
 
-            const exists = this.project.tasks.some(task =>
+        meeting.status="closed";
+        meeting.closedAt=new Date().toISOString();
 
-                task.meeting === meeting.id &&
-                task.noteId === note.id
+        if(!this.project.tasks)
+            this.project.tasks=[];
 
-            );
+        meeting.topics.forEach(topic=>{
 
-            if (exists)
-                return;
+            (topic.notes||[]).forEach(note=>{
 
-            this.project.tasks.push({
+                if(note.type!=="todo")
+                    return;
 
-                id: crypto.randomUUID(),
+                const exists=this.project.tasks.some(task=>
 
-                noteId: note.id,
+                    task.noteId===note.id
 
-                meeting: meeting.id,
+                );
 
-                meetingTitle: meeting.title,
+                if(exists)
+                    return;
 
-                topic: topic.title,
+                this.project.tasks.push({
 
-                title: note.title,
+                    id:crypto.randomUUID(),
 
-                description: note.description,
+                    noteId:note.id,
 
-                person: note.assigned,
+                    meeting:meeting.id,
 
-                assigned: note.assigned,
+                    meetingTitle:meeting.title,
 
-                date: note.due,
+                    topic:topic.title,
 
-                due: note.due,
+                    title:note.title,
 
-                priority: note.priority,
+                    description:note.description,
 
-                status: note.status || "Offen",
+                    person:note.assigned,
 
-                created: new Date().toISOString()
+                    assigned:note.assigned,
+
+                    date:note.due,
+
+                    due:note.due,
+
+                    priority:note.priority,
+
+                    status:note.status || "Offen",
+
+                    created:new Date().toISOString()
+
+                });
 
             });
 
         });
 
-    });
+        saveProjects();
 
-    saveProjects();
+        alert("✅ Besprechung abgeschlossen.");
 
-    alert("✅ Besprechung abgeschlossen.\n\nDie Aufgaben wurden ins Projekt übernommen.");
+        MeetingModule.open(this.project.id);
 
-    MeetingModule.open(this.project.id);
+    }
 
-}
 };
