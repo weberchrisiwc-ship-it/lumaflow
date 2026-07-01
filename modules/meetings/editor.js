@@ -328,14 +328,51 @@ TOP löschen
 
     },
 
-    parseQuickNotes(){
+parseQuickNotes(){
 
-        this.meeting.quickNotes=
-            document.getElementById("meetingQuickNotes").value;
+    this.meeting.quickNotes =
+        document.getElementById("meetingQuickNotes").value;
 
-        alert("🚧 Der intelligente Parser kommt als Nächstes.");
+    const notes = MeetingParser.parse(this.meeting.quickNotes);
 
-    },
+    if(notes.length === 0){
+
+        alert("Keine Notizen gefunden.");
+        return;
+
+    }
+
+    if(this.meeting.topics.length === 0){
+
+        this.meeting.topics.push({
+
+            id: crypto.randomUUID(),
+
+            title: "Besprechungsnotizen",
+
+            notes: []
+
+        });
+
+    }
+
+    const topic = this.meeting.topics[0];
+
+    notes.forEach(note=>{
+
+        const exists = topic.notes.some(n=>n.title===note.title);
+
+        if(!exists){
+
+            topic.notes.push(note);
+
+        }
+
+    });
+
+    this.render();
+
+},
 
     finish(){
 
