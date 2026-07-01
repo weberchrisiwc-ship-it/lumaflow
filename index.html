@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>LumaFlow</title>
+<title>LumaFlow</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -18,24 +19,60 @@
     <aside class="sidebar">
 
         <div class="logo">
+
             💡 LumaFlow
+
         </div>
 
         <nav>
 
-            <button onclick="showDashboard()">🏠 Dashboard</button>
+            <button id="navDashboard" onclick="navigate('dashboard')">
+                <span>🏠</span>
+                <span>Dashboard</span>
+            </button>
 
-            <button onclick="showProjects()">📁 Projekte</button>
+            <button id="navProjects" onclick="navigate('projects')">
+                <span>📁</span>
+                <span>Projekte</span>
+            </button>
 
-            <button onclick="showTasks()">✅ Aufgaben</button>
+            <hr>
 
-            <button onclick="showMeetings()">📅 Besprechungen</button>
+            <button id="navTasks" onclick="navigate('tasks')">
+                <span>✅</span>
+                <span>Aufgaben</span>
+            </button>
 
-            <button onclick="showProtocols()">📝 Protokolle</button>
+            <button id="navMeetings" onclick="navigate('meetings')">
+                <span>📅</span>
+                <span>Besprechungen</span>
+            </button>
 
-            <button onclick="showContacts()">👥 Kontakte</button>
+            <button id="navProtocols" onclick="navigate('protocols')">
+                <span>📝</span>
+                <span>Protokolle</span>
+            </button>
+
+            <button id="navContacts" onclick="navigate('contacts')">
+                <span>👥</span>
+                <span>Kontakte</span>
+            </button>
 
         </nav>
+
+        <div class="sidebar-footer">
+
+            <hr>
+
+            <button id="navSettings">
+
+                <span>⚙️</span>
+
+                <span>Einstellungen</span>
+
+            </button>
+
+        </div>
 
     </aside>
 
@@ -46,6 +83,73 @@
     </main>
 
 </div>
+
+<script>
+
+function setActiveNavigation(id){
+
+    document
+        .querySelectorAll(".sidebar button")
+        .forEach(b=>b.classList.remove("active"));
+
+    const btn=document.getElementById(id);
+
+    if(btn)
+        btn.classList.add("active");
+
+}
+
+function navigate(page){
+
+    switch(page){
+
+        case "dashboard":
+
+            setActiveNavigation("navDashboard");
+            showDashboard();
+            break;
+
+        case "projects":
+
+            setActiveNavigation("navProjects");
+            showProjects();
+            break;
+
+        case "tasks":
+
+            setActiveNavigation("navTasks");
+            showTasks();
+            break;
+
+        case "meetings":
+
+            setActiveNavigation("navMeetings");
+            showMeetings();
+            break;
+
+        case "protocols":
+
+            setActiveNavigation("navProtocols");
+            showProtocols();
+            break;
+
+        case "contacts":
+
+            setActiveNavigation("navContacts");
+            showContacts();
+            break;
+
+    }
+
+}
+
+window.onload=()=>{
+
+    navigate("dashboard");
+
+};
+
+</script>
 
 <script src="modules/dashboard.js"></script>
 <script src="modules/projects.js"></script>
@@ -64,4 +168,5 @@
 <script src="app.js"></script>
 
 </body>
+
 </html>
