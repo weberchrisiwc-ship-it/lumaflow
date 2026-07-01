@@ -199,7 +199,10 @@ function changeTheme(theme){
 
 function changeAccent(color){
 
-    settings.accent = color;
+    settings.accent=color;
+
+    document.documentElement.style
+        .setProperty("--accent",color);
 
     saveSettings();
 
