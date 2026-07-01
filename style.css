@@ -2,7 +2,45 @@
    LumaFlow UI 3.0
    style.css - Teil 1/2
 ========================================================== */
+/* =====================================
+   THEME
+===================================== */
 
+:root{
+
+    --accent:#2450d3;
+
+    --bg:#eef2f7;
+
+    --card:#ffffff;
+
+    --sidebar:#2450d3;
+
+    --text:#222;
+
+    --border:#dfe5ec;
+
+    --hover:#f4f7fb;
+
+}
+
+/* ---------- DARK MODE ---------- */
+
+body.dark{
+
+    --bg:#111827;
+
+    --card:#1f2937;
+
+    --sidebar:#0f172a;
+
+    --text:#f3f4f6;
+
+    --border:#374151;
+
+    --hover:#2b3648;
+
+}
 *{
     margin:0;
     padding:0;
@@ -36,8 +74,13 @@
 
 body{
 
-    background:var(--background);
+    background:var(--bg);
+
     color:var(--text);
+
+    transition:.25s;
+
+}
 
 }
 
@@ -56,16 +99,11 @@ body{
 /* ==========================================================
    SIDEBAR
 ========================================================== */
-
 .sidebar{
 
-    width:250px;
+    width:240px;
 
-    background:linear-gradient(
-        180deg,
-        #2450d3 0%,
-        #1d46bf 100%
-    );
+    background:var(--sidebar);
 
     color:white;
 
@@ -73,11 +111,11 @@ body{
 
     flex-direction:column;
 
-    padding:28px 18px;
+    padding:25px 18px;
 
-    box-shadow:
+    transition:.25s;
 
-        8px 0 30px rgba(0,0,0,.08);
+}
 
 }
 
@@ -207,17 +245,21 @@ body{
 
 .card{
 
-    background:var(--surface);
+    background:var(--card);
 
-    border-radius:var(--radius);
+    color:var(--text);
 
-    padding:24px;
+    border:1px solid var(--border);
 
-    margin-bottom:22px;
+    border-radius:14px;
 
-    box-shadow:var(--shadow);
+    padding:25px;
 
-    border:1px solid rgba(0,0,0,.03);
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+
+    margin-bottom:20px;
+
+    transition:.25s;
 
 }
 
@@ -279,7 +321,7 @@ body{
 
 .btn-primary{
 
-    background:var(--primary);
+    background:var(--accent);
 
     color:white;
 
@@ -287,7 +329,7 @@ body{
 
 .btn-primary:hover{
 
-    background:var(--primary-hover);
+    filter:brightness(.9);
 
 }
 
@@ -403,23 +445,17 @@ th{
 
     text-align:left;
 
-    padding:14px 16px;
+    padding:14px;
 
-    font-weight:600;
-
-    color:var(--text);
-
-    border-bottom:1px solid var(--border);
+    border-bottom:2px solid var(--border);
 
 }
 
 td{
 
-    padding:14px 16px;
+    padding:14px;
 
-    border-bottom:1px solid #edf0f4;
-
-    vertical-align:middle;
+    border-bottom:1px solid var(--border);
 
 }
 
@@ -672,5 +708,50 @@ tbody tr:hover{
         padding:20px;
 
     }
+input,
+select,
+textarea{
 
+    background:var(--card);
+
+    color:var(--text);
+
+    border:1px solid var(--border);
+
+    transition:.25s;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline:none;
+
+    border-color:var(--accent);
+
+}
+   body.compact .card{
+
+    padding:15px;
+
+}
+
+body.compact .btn{
+
+    padding:8px 14px;
+
+}
+
+body.compact td,
+body.compact th{
+
+    padding:8px;
+
+}
+   body.no-animations *{
+
+    transition:none !important;
+
+}
 }
