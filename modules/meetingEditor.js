@@ -1,8 +1,8 @@
-// =========================================
+// ==========================================
 // LumaFlow
 // Meeting Editor
-// Version 0.4
-// =========================================
+// Version 0.6
+// ==========================================
 
 function openMeetingEditor(projectId, meetingIndex = null) {
 
@@ -25,19 +25,27 @@ function openMeetingEditor(projectId, meetingIndex = null) {
             participants: "",
 
             topics: [
-
                 {
+                    id: crypto.randomUUID(),
                     title: "TOP 1",
-                    notes: ""
+                    notes: []
                 }
-
             ]
 
         };
 
     } else {
 
-        meeting = project.meetings[meetingIndex];
+        meeting = JSON.parse(
+            JSON.stringify(project.meetings[meetingIndex])
+        );
+
+        meeting.topics.forEach(topic => {
+
+            if (!topic.notes)
+                topic.notes = [];
+
+        });
 
     }
 
@@ -49,39 +57,47 @@ function openMeetingEditor(projectId, meetingIndex = null) {
 
 }
 
+// ==========================================
+
 function renderMeetingEditor() {
 
     const meeting = window.currentMeeting;
 
-    let topicsHTML = "";
+    let html = "";
 
     meeting.topics.forEach((topic, index) => {
 
-        topicsHTML += `
+        html += `
 
-<div class="card" style="margin-bottom:20px;">
+<div class="card">
 
-<h3>${topic.title}</h3>
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
+<h2>${topic.title}</h2>
+
+<button
+class="btn btn-danger"
+onclick="removeTopic(${index})">
+
+🗑
+
+</button>
+
+</div>
 
 <input
+
 value="${topic.title}"
-oninput="updateTopicTitle(${index},this.value)">
 
-<textarea
+placeholder="Titel"
 
-style="width:100%;
-height:180px;
-margin-top:15px;
-padding:12px;
-border:1px solid #ddd;
-border-radius:10px;
-resize:vertical;"
+oninput="updateTopicTitle(${index},this.value)"
 
-placeholder="Hier einfach mitschreiben..."
+style="margin-top:15px;">
 
-oninput="updateTopicNotes(${index},this.value)"
+<br><br>
 
->${topic.notes}</textarea>
+${renderNotes(index)}
 
 </div>
 
@@ -129,7 +145,7 @@ style="margin-bottom:15px;">
 
 id="meetingParticipants"
 
-placeholder="Teilnehmer (mit Komma trennen)"
+placeholder="Teilnehmer"
 
 value="${meeting.participants}"
 
@@ -137,24 +153,237 @@ value="${meeting.participants}"
 
 </div>
 
+${html}
+
 <br>
 
-${topicsHTML}
-
 <button
-
 class="btn btn-primary"
-
 onclick="addTopic()">
 
 + TOP hinzufügen
 
 </button>
 
-<br><br>
+<button
+class="btn"
+onclick="showMeetingsPage(window.currentProjectId)">
+
+← Zurück
+
+</button>
 
 <button
+class="btn btn-primary"
+onclick="saveMeetingEditor()"
+style="float:right;">
 
+💾 Speichern
+
+</button>
+
+`);
+
+}
+
+// ==========================================
+
+function addTopic() {
+
+    window.currentMeeting.topics.push({
+
+        id: crypto.randomUUID(),
+
+        title: "TOP " + (window.currentMeeting.topics.length + 1),
+
+        notes: []
+
+    });
+
+    renderMeetingEditor();
+
+}
+
+function removeTopic(index) {
+
+    if (!confirm("TOP löschen?"))
+        return;
+
+    window.currentMeeting.topics.splice(index, 1);
+
+    renderMeetingEditor();
+
+}
+
+function updateTopicTitle(index, value) {
+
+    window.currentMeeting.topics[index].title = value;
+
+}
+// ==========================================
+// Speichern
+// ==========================================
+
+function saveMeetingEditor() {
+
+    const meeting = window.currentMeeting;
+
+    meeting.title = document.getElementById("meetingTitle").value;
+    meeting.date = document.getElementById("meetingDate").value;
+    meeting.location = document.getElementById("meetingLocation").value;
+    meeting.participants = document.getElementById("meetingParticipants").value;
+
+    const project = projects.find(p => p.id === window.currentProjectId);
+
+    if (window.currentMeetingIndex === null) {
+
+        project.meetings.push(meeting);
+
+    } else {
+
+        project.meetings[window.currentMeetingIndex] = meeting;
+
+    }
+
+    saveProjects();
+
+    showMeetingsPage(window.currentProjectId);
+
+}
+
+// ==========================================
+// Besprechung abschließen
+// ==========================================
+
+function finishMeeting() {
+
+    saveMeetingEditor();
+
+    const project = projects.find(
+        p => p.id === window.currentProjectId
+    );
+
+    const meeting = project.meetings[
+        window.currentMeetingIndex === null
+            ? project.meetings.length - 1
+            : window.currentMeetingIndex
+    ];
+
+    saveMeetingResults(project.id, meeting);
+
+    const protocol = createMeetingProtocol(meeting);
+
+    window.currentProtocol = protocol;
+
+    alert("Besprechung erfolgreich abgeschlossen.");
+
+    showMeetingsPage(project.id);
+
+}
+
+// ==========================================
+// Vorschau Protokoll
+// ==========================================
+
+function previewProtocol() {
+
+    const protocol = createMeetingProtocol(
+        window.currentMeeting
+    );
+
+    const win = window.open("", "_blank");
+
+    win.document.write(`
+        <html>
+
+        <head>
+
+        <title>Protokoll</title>
+
+        <style>
+
+        body{
+
+            font-family:Segoe UI;
+            padding:40px;
+
+        }
+
+        h2{
+
+            color:#2450d3;
+
+        }
+
+        pre{
+
+            white-space:pre-wrap;
+
+            font-family:inherit;
+
+            background:#f5f5f5;
+
+            padding:15px;
+
+            border-radius:8px;
+
+        }
+
+        </style>
+
+        </head>
+
+        <body>
+
+        ${protocol}
+
+        </body>
+
+        </html>
+
+    `);
+
+}
+
+// ==========================================
+// Toolbar
+// ==========================================
+
+function meetingToolbar(){
+
+    return `
+
+<br>
+
+<div
+style="display:flex;
+justify-content:space-between;
+margin-top:25px;">
+
+<div>
+
+<button
+class="btn"
+onclick="showMeetingsPage(window.currentProjectId)">
+
+← Zurück
+
+</button>
+
+</div>
+
+<div>
+
+<button
+class="btn"
+
+onclick="previewProtocol()">
+
+👁 Vorschau
+
+</button>
+
+<button
 class="btn btn-primary"
 
 onclick="saveMeetingEditor()">
@@ -164,68 +393,20 @@ onclick="saveMeetingEditor()">
 </button>
 
 <button
+class="btn btn-primary"
 
-class="btn"
+style="margin-left:10px;"
 
-onclick="showMeetingsPage(window.currentProjectId)">
+onclick="finishMeeting()">
 
-← Zurück
+✅ Besprechung abschließen
 
 </button>
 
-`);
+</div>
 
-}
+</div>
 
-function addTopic(){
-
-    window.currentMeeting.topics.push({
-
-        title:"TOP "+(window.currentMeeting.topics.length+1),
-
-        notes:""
-
-    });
-
-    renderMeetingEditor();
-
-}
-
-function updateTopicTitle(index,value){
-
-    window.currentMeeting.topics[index].title=value;
-
-}
-
-function updateTopicNotes(index,value){
-
-    window.currentMeeting.topics[index].notes=value;
-
-}
-
-function saveMeetingEditor(){
-
-    const meeting=window.currentMeeting;
-
-    meeting.title=document.getElementById("meetingTitle").value;
-    meeting.date=document.getElementById("meetingDate").value;
-    meeting.location=document.getElementById("meetingLocation").value;
-    meeting.participants=document.getElementById("meetingParticipants").value;
-
-    const project=projects.find(p=>p.id===window.currentProjectId);
-
-    if(window.currentMeetingIndex===null){
-
-        project.meetings.push(meeting);
-
-    }else{
-
-        project.meetings[window.currentMeetingIndex]=meeting;
-
-    }
-
-    saveProjects();
-
-    showMeetingsPage(window.currentProjectId);
+`;
 
 }
