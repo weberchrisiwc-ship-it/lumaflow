@@ -67,7 +67,15 @@ onclick="openProject(projects.findIndex(p=>p.id==='${project.id}'))">
 
 <p>📍 ${meeting.location || "-"}</p>
 
-<p>👥 ${meeting.participants || "-"}</p>
+<p>
+
+${meeting.status==="closed"
+
+? "🟢 Abgeschlossen"
+
+: "🟡 Offen"}
+
+</p>
 
 <div style="margin-top:20px;">
 
