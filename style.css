@@ -980,3 +980,18 @@ text-shadow:
     margin:15px 0;
 
 }
+/* ==========================================
+   Aktiver Menüpunkt
+========================================== */
+
+.sidebar button.active{
+
+    background:white;
+
+    color:var(--accent);
+
+    font-weight:700;
+
+    border-radius:14px;
+
+}
