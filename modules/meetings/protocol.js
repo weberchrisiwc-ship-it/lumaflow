@@ -1,7 +1,7 @@
 // =============================================
 // LumaFlow
 // Meeting Protocol
-// Version 1.1
+// Version 2.0
 // =============================================
 
 const MeetingProtocol = {
@@ -30,12 +30,12 @@ const MeetingProtocol = {
 
 <tr>
 <td><b>Teilnehmer</b></td>
-<td>${meeting.participants.join(", ")}</td>
+<td>${(meeting.participants || []).join(", ")}</td>
 </tr>
 
 <tr>
-<td><b>Erstellt</b></td>
-<td>${new Date().toLocaleString()}</td>
+<td><b>Status</b></td>
+<td>${meeting.status==="closed" ? "Abgeschlossen" : "Offen"}</td>
 </tr>
 
 </table>
@@ -44,7 +44,7 @@ const MeetingProtocol = {
 
 `;
 
-        meeting.topics.forEach(topic=>{
+        (meeting.topics || []).forEach(topic=>{
 
             html += this.renderTopic(topic);
 
@@ -58,48 +58,51 @@ const MeetingProtocol = {
 
     renderTopic(topic){
 
-        let html = `
+        let html = `<h2>${topic.title}</h2>`;
 
-<h2>${topic.title}</h2>
+        const infos =
+            (topic.notes || []).filter(n=>n.type==="info");
 
-`;
+        const decisions =
+            (topic.notes || []).filter(n=>n.type==="decision");
 
-        const infos=(topic.notes||[]).filter(n=>n.type==="info");
-        const decisions=(topic.notes||[]).filter(n=>n.type==="decision");
-        const todos=(topic.notes||[]).filter(n=>n.type==="todo");
-        const appointments=(topic.notes||[]).filter(n=>n.type==="appointment");
+        const todos =
+            (topic.notes || []).filter(n=>n.type==="todo");
+
+        const appointments =
+            (topic.notes || []).filter(n=>n.type==="appointment");
 
         if(infos.length){
 
-            html+="<h3>ℹ Informationen</h3><ul>";
+            html += "<h3>ℹ Informationen</h3><ul>";
 
             infos.forEach(note=>{
 
-                html+=`<li>${note.title}</li>`;
+                html += `<li>${note.title}</li>`;
 
             });
 
-            html+="</ul>";
+            html += "</ul>";
 
         }
 
         if(decisions.length){
 
-            html+="<h3>✔ Beschlüsse</h3><ul>";
+            html += "<h3>✔ Beschlüsse</h3><ul>";
 
             decisions.forEach(note=>{
 
-                html+=`<li>${note.title}</li>`;
+                html += `<li>${note.title}</li>`;
 
             });
 
-            html+="</ul>";
+            html += "</ul>";
 
         }
 
         if(todos.length){
 
-            html+=`
+            html += `
 
 <h3>☑ Aufgaben</h3>
 
@@ -125,7 +128,7 @@ const MeetingProtocol = {
 
             todos.forEach(todo=>{
 
-                html+=`
+                html += `
 
 <tr>
 
@@ -147,23 +150,23 @@ const MeetingProtocol = {
 
             });
 
-            html+="</table>";
+            html += "</table>";
 
         }
 
         if(appointments.length){
 
-            html+="<h3>📅 Termine</h3><ul>";
+            html += "<h3>📅 Termine</h3><ul>";
 
             appointments.forEach(note=>{
 
-                html+=`
+                html += `
 
 <li>
 
 ${note.title}
 
-${note.due ? "- "+note.due : ""}
+${note.due ? " - " + note.due : ""}
 
 </li>
 
@@ -171,11 +174,11 @@ ${note.due ? "- "+note.due : ""}
 
             });
 
-            html+="</ul>";
+            html += "</ul>";
 
         }
 
-        html+="<hr>";
+        html += "<hr>";
 
         return html;
 
@@ -183,9 +186,33 @@ ${note.due ? "- "+note.due : ""}
 
     preview(){
 
-        const html=this.create(MeetingEditor.meeting);
+        this.open(MeetingEditor.meeting);
 
-        const win=window.open("","_blank");
+    },
+
+    previewMeeting(projectId,index){
+
+        const project =
+            projects.find(p=>p.id===projectId);
+
+        if(!project) return;
+
+        const meeting =
+            project.meetings[index];
+
+        if(!meeting) return;
+
+        this.open(meeting);
+
+    },
+
+    open(meeting){
+
+        const html =
+            this.create(meeting);
+
+        const win =
+            window.open("","_blank");
 
         win.document.write(`
 
@@ -193,13 +220,13 @@ ${note.due ? "- "+note.due : ""}
 
 <head>
 
-<title>Besprechungsprotokoll</title>
+<title>${meeting.title}</title>
 
 <style>
 
 body{
 
-font-family:Segoe UI,Arial;
+font-family:Segoe UI,Arial,sans-serif;
 
 padding:40px;
 
@@ -209,7 +236,7 @@ background:white;
 
 h1{
 
-color:#2458ff;
+color:#2450d3;
 
 margin-bottom:30px;
 
@@ -219,9 +246,15 @@ h2{
 
 margin-top:35px;
 
+padding-bottom:8px;
+
 border-bottom:2px solid #ddd;
 
-padding-bottom:8px;
+}
+
+h3{
+
+margin-top:25px;
 
 }
 
@@ -247,7 +280,7 @@ text-align:left;
 
 th{
 
-background:#f3f3f3;
+background:#f4f6fb;
 
 }
 
@@ -257,11 +290,51 @@ margin:35px 0;
 
 }
 
+.toolbar{
+
+position:fixed;
+
+top:20px;
+
+right:20px;
+
+display:flex;
+
+gap:10px;
+
+}
+
+.toolbar button{
+
+padding:10px 18px;
+
+background:#2450d3;
+
+color:white;
+
+border:none;
+
+border-radius:8px;
+
+cursor:pointer;
+
+}
+
 </style>
 
 </head>
 
 <body>
+
+<div class="toolbar">
+
+<button onclick="window.print()">
+
+🖨 Drucken
+
+</button>
+
+</div>
 
 ${html}
 
