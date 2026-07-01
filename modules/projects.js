@@ -373,7 +373,7 @@ onclick="showTasksPage('${p.id}')">
 <h1>0</h1>
 
 <button class="btn btn-primary"
-onclick="showMeetingsPage('${p.id}')">
+onclick="MeetingModule.open('${p.id}')">
 
 Öffnen
 
