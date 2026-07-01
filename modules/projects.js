@@ -571,7 +571,8 @@ onclick="showDocuments('${p.id}')">
 <h1>${p.contacts.length}</h1>
 
 <button
-class="btn">
+class="btn btn-primary"
+onclick="showProjectContacts('${p.id}')">
 
 Öffnen
 
