@@ -275,72 +275,81 @@ TOP löschen
 
     finish() {
 
-        this.save(false);
+    this.save(false);
 
-        const meeting = this.project.meetings[this.meetingIndex];
+    const meeting = this.project.meetings[this.meetingIndex];
 
-        if (meeting.status === "closed") {
+    if (meeting.status === "closed") {
 
-            alert("Diese Besprechung wurde bereits abgeschlossen.");
-            return;
+        alert("Diese Besprechung wurde bereits abgeschlossen.");
+        return;
 
-        }
+    }
 
-        meeting.status = "closed";
-        meeting.closedAt = new Date().toISOString();
+    meeting.status = "closed";
+    meeting.closedAt = new Date().toISOString();
 
-        if (!this.project.tasks)
-            this.project.tasks = [];
+    if (!this.project.tasks)
+        this.project.tasks = [];
 
-        meeting.topics.forEach(topic => {
+    meeting.topics.forEach(topic => {
 
-            (topic.notes || []).forEach(note => {
+        (topic.notes || []).forEach(note => {
 
-                if (note.type !== "todo")
-                    return;
+            if (note.type !== "todo")
+                return;
 
-                const exists = this.project.tasks.some(task =>
+            const exists = this.project.tasks.some(task =>
 
-                    task.meeting === meeting.title &&
-                    task.title === note.title
+                task.meeting === meeting.id &&
+                task.noteId === note.id
 
-                );
+            );
 
-                if (exists)
-                    return;
+            if (exists)
+                return;
 
-                this.project.tasks.push({
+            this.project.tasks.push({
 
-                    id: crypto.randomUUID(),
+                id: crypto.randomUUID(),
 
-                    title: note.title,
+                noteId: note.id,
 
-                    description: note.description,
+                meeting: meeting.id,
 
-                    assigned: note.assigned,
+                meetingTitle: meeting.title,
 
-                    due: note.due,
+                topic: topic.title,
 
-                    priority: note.priority,
+                title: note.title,
 
-                    status: "Offen",
+                description: note.description,
 
-                    meeting: meeting.title,
+                person: note.assigned,
 
-                    topic: topic.title
+                assigned: note.assigned,
 
-                });
+                date: note.due,
+
+                due: note.due,
+
+                priority: note.priority,
+
+                status: note.status || "Offen",
+
+                created: new Date().toISOString()
 
             });
 
         });
 
-        saveProjects();
+    });
 
-        alert("Besprechung erfolgreich abgeschlossen.");
+    saveProjects();
 
-        MeetingModule.open(this.project.id);
+    alert("✅ Besprechung abgeschlossen.\n\nDie Aufgaben wurden ins Projekt übernommen.");
 
-    }
+    MeetingModule.open(this.project.id);
 
+}
 };
