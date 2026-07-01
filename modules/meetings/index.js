@@ -85,6 +85,16 @@ onclick="MeetingModule.edit('${project.id}',${index})">
 
 Öffnen
 
+<button
+class="btn btn-primary"
+onclick="MeetingModule.edit('${project.id}',${index})">
+
+${meeting.status==="closed"
+
+? "Ansehen"
+
+: "Bearbeiten"}
+
 </button>
 
 <button
