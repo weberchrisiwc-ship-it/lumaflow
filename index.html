@@ -3,12 +3,16 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>LumaFlow</title>
+    <title>LumaFlow</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
@@ -16,62 +20,107 @@
 
 <div class="app">
 
-    <aside class="sidebar">
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
 
-        <div class="logo">
+    <aside id="sidebar" class="sidebar">
 
-            💡 LumaFlow
+        <div class="sidebar-header">
+
+            <div class="logo">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                <span>LumaFlow</span>
+
+            </div>
 
         </div>
 
-        <nav>
+        <nav class="sidebar-nav">
 
-            <button id="navDashboard" onclick="navigate('dashboard')">
-                <span>🏠</span>
+            <button id="navDashboard"
+                    class="nav-item active"
+                    onclick="navigate('dashboard')">
+
+                <i class="fa-solid fa-house"></i>
+
                 <span>Dashboard</span>
+
             </button>
 
-            <button id="navProjects" onclick="navigate('projects')">
-                <span>📁</span>
+            <button id="navProjects"
+                    class="nav-item"
+                    onclick="navigate('projects')">
+
+                <i class="fa-solid fa-folder-open"></i>
+
                 <span>Projekte</span>
+
             </button>
 
-            <button id="navCalendar" onclick="navigate('calendar')">
-                <span>🗓️</span>
+            <button id="navCalendar"
+                    class="nav-item"
+                    onclick="navigate('calendar')">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
                 <span>Kalender</span>
+
             </button>
 
             <hr>
 
-            <button id="navTasks" onclick="navigate('tasks')">
-                <span>✅</span>
+            <button id="navTasks"
+                    class="nav-item"
+                    onclick="navigate('tasks')">
+
+                <i class="fa-solid fa-list-check"></i>
+
                 <span>Aufgaben</span>
+
             </button>
 
-            <button id="navMeetings" onclick="navigate('meetings')">
-                <span>📅</span>
+            <button id="navMeetings"
+                    class="nav-item"
+                    onclick="navigate('meetings')">
+
+                <i class="fa-solid fa-users"></i>
+
                 <span>Besprechungen</span>
+
             </button>
 
-            <button id="navProtocols" onclick="navigate('protocols')">
-                <span>📝</span>
+            <button id="navProtocols"
+                    class="nav-item"
+                    onclick="navigate('protocols')">
+
+                <i class="fa-solid fa-file-lines"></i>
+
                 <span>Protokolle</span>
+
             </button>
 
-            <button id="navContacts" onclick="navigate('contacts')">
-                <span>👥</span>
+            <button id="navContacts"
+                    class="nav-item"
+                    onclick="navigate('contacts')">
+
+                <i class="fa-solid fa-address-book"></i>
+
                 <span>Kontakte</span>
+
             </button>
 
         </nav>
 
         <div class="sidebar-footer">
 
-            <hr>
+            <button id="navSettings"
+                    class="nav-item"
+                    onclick="showSettings()">
 
-            <button id="navSettings" onclick="showSettings()">
-
-                <span>⚙️</span>
+                <i class="fa-solid fa-gear"></i>
 
                 <span>Einstellungen</span>
 
@@ -81,62 +130,88 @@
 
     </aside>
 
-<main class="content">
+    <!-- =========================
+         CONTENT
+    ========================== -->
 
-    <header class="topbar">
+    <main class="content">
 
-        <div class="topbar-left">
+        <!-- =====================
+             TOPBAR
+        ====================== -->
 
-<button
-class="menu-btn"
-onclick="toggleSidebar()">
+        <header class="topbar">
 
-☰
+            <div class="topbar-left">
 
-</button>
+                <button class="menu-btn"
+                        onclick="toggleSidebar()">
 
-            <input
-                id="globalSearch"
-                type="text"
-                placeholder="🔍 Projekte, Aufgaben, Meetings suchen...">
+                    <i class="fa-solid fa-bars"></i>
 
-        </div>
+                </button>
 
-        <div class="topbar-right">
+                <div class="page-title">
 
-            <button class="icon-btn">
+                    <h2>LumaFlow</h2>
 
-🔔
-
-            </button>
-
-            <div class="user-box">
-
-                <div class="avatar">
-
-C
-
-                </div>
-
-                <div>
-
-<b>Christoph</b>
-
-<br>
-
-<small>LumaFlow</small>
+                    <small>Projektmanagement</small>
 
                 </div>
 
             </div>
 
-        </div>
+            <div class="topbar-center">
 
-    </header>
+                <div class="search-box">
 
-    <div id="page"></div>
+                    <i class="fa-solid fa-magnifying-glass"></i>
 
-</main>
+                    <input id="globalSearch"
+                           type="text"
+                           placeholder="Suche nach Projekten, Aufgaben oder Meetings...">
+
+                </div>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <button class="icon-btn">
+
+                    <i class="fa-regular fa-bell"></i>
+
+                </button>
+
+                <div class="user-box">
+
+                    <div class="avatar">
+
+                        C
+
+                    </div>
+
+                    <div>
+
+                        <strong>Christoph</strong>
+
+                        <small>Administrator</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- =====================
+             PAGE
+        ====================== -->
+
+        <div id="page"></div>
+
+    </main>
 
 </div>
 
@@ -145,13 +220,16 @@ C
 function setActiveNavigation(id){
 
     document
-        .querySelectorAll(".sidebar button")
-        .forEach(b=>b.classList.remove("active"));
+        .querySelectorAll(".nav-item")
+        .forEach(button => button.classList.remove("active"));
 
-    const btn=document.getElementById(id);
+    const current=document.getElementById(id);
 
-    if(btn)
-        btn.classList.add("active");
+    if(current){
+
+        current.classList.add("active");
+
+    }
 
 }
 
@@ -162,59 +240,85 @@ function navigate(page){
         case "dashboard":
 
             setActiveNavigation("navDashboard");
+
             showDashboard();
+
             break;
 
         case "projects":
 
             setActiveNavigation("navProjects");
+
             showProjects();
+
             break;
 
         case "calendar":
 
             setActiveNavigation("navCalendar");
+
             showCalendar();
+
             break;
 
         case "tasks":
 
             setActiveNavigation("navTasks");
+
             showTasks();
+
             break;
 
         case "meetings":
 
             setActiveNavigation("navMeetings");
+
             showMeetings();
+
             break;
 
         case "protocols":
 
             setActiveNavigation("navProtocols");
+
             showProtocols();
+
             break;
 
         case "contacts":
 
             setActiveNavigation("navContacts");
+
             showContacts();
+
             break;
 
     }
 
 }
 
-window.onload=()=>{
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .toggle("collapsed");
+
+}
+
+window.onload=function(){
 
     navigate("dashboard");
 
 };
 
 </script>
-    
+
+<!-- Kalender -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
-    
+
+<!-- Module -->
+
 <script src="modules/dashboard.js"></script>
 <script src="modules/projects.js"></script>
 <script src="modules/tasks.js"></script>
@@ -229,13 +333,15 @@ window.onload=()=>{
 <script src="modules/meetings/protocol.js"></script>
 
 <script src="modules/protocols.js"></script>
+
 <script src="modules/contacts.js"></script>
 <script src="modules/projectContacts.js"></script>
+
 <script src="modules/documents.js"></script>
+
 <script src="modules/settings.js"></script>
-    
+
 <script src="app.js"></script>
 
 </body>
-
 </html>
