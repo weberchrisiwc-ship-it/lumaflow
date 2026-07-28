@@ -1,818 +1,501 @@
 /* ==========================================================
-   LumaFlow 4.0
-   style.css
+   LumaFlow 5.0
+   PART 1A
+   RESET • VARIABLES • DARKMODE • LAYOUT • SIDEBAR
 ========================================================== */
+
 
 /* ==========================================================
    RESET
 ========================================================== */
 
-*{
+*,
+*::before,
+*::after{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:"Segoe UI",Arial,sans-serif;
 }
 
-/* ==========================================================
-   THEME
-========================================================== */
-
-:root{
-
-    --accent:#2450d3;
-
-    --accent-hover:#183ea9;
-
-    --bg:#eef2f7;
-
-    --surface:#ffffff;
-
-    --sidebar:#2450d3;
-
-    --sidebar-hover:rgba(255,255,255,.15);
-
-    --text:#1f2937;
-
-    --text-light:#6b7280;
-
-    --border:#e5e7eb;
-
-    --success:#16a34a;
-
-    --warning:#d97706;
-
-    --danger:#dc2626;
-
-    --radius:16px;
-
-    --shadow:0 10px 30px rgba(0,0,0,.08);
-
+html{
+    height:100%;
 }
-
-/* ==========================================================
-   DARK MODE
-========================================================== */
-
-body.dark{
-
-    --bg:#111827;
-
-    --surface:#1f2937;
-
-    --sidebar:#0f172a;
-
-    --sidebar-hover:rgba(255,255,255,.08);
-
-    --text:#f3f4f6;
-
-    --text-light:#cbd5e1;
-
-    --border:#374151;
-
-    --shadow:0 10px 30px rgba(0,0,0,.35);
-
-}
-
-/* ==========================================================
-   BODY
-========================================================== */
 
 body{
 
-    background:var(--bg);
+    height:100%;
 
-    color:var(--text);
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
-    transition:.25s;
+    font-size:15px;
 
-}
+    background:#f4f7fb;
 
-/* ==========================================================
-   LAYOUT
-========================================================== */
-
-.app{
-
-    display:flex;
-
-    height:100vh;
+    color:#111827;
 
     overflow:hidden;
 
-}
+    -webkit-font-smoothing:antialiased;
 
-.content{
-
-    flex:1;
-
-    overflow:auto;
-
-    padding:35px;
+    -moz-osx-font-smoothing:grayscale;
 
 }
 
-.content h1{
-
-    font-size:42px;
-
-    margin-bottom:10px;
-
-}
-
-.content h2{
-
-    margin-bottom:15px;
-
-}
-
-.content p{
-
-    color:var(--text-light);
-
-}
-/* ==========================================================
-   LumaFlow 4.0
-   style.css
-========================================================== */
-
-/* ==========================================================
-   RESET
-========================================================== */
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI",Arial,sans-serif;
-}
-
-/* ==========================================================
-   THEME
-========================================================== */
-
-:root{
-
-    --accent:#2450d3;
-
-    --accent-hover:#183ea9;
-
-    --bg:#eef2f7;
-
-    --surface:#ffffff;
-
-    --sidebar:#2450d3;
-
-    --sidebar-hover:rgba(255,255,255,.15);
-
-    --text:#1f2937;
-
-    --text-light:#6b7280;
-
-    --border:#e5e7eb;
-
-    --success:#16a34a;
-
-    --warning:#d97706;
-
-    --danger:#dc2626;
-
-    --radius:16px;
-
-    --shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
-/* ==========================================================
-   DARK MODE
-========================================================== */
-
-body.dark{
-
-    --bg:#111827;
-
-    --surface:#1f2937;
-
-    --sidebar:#0f172a;
-
-    --sidebar-hover:rgba(255,255,255,.08);
-
-    --text:#f3f4f6;
-
-    --text-light:#cbd5e1;
-
-    --border:#374151;
-
-    --shadow:0 10px 30px rgba(0,0,0,.35);
-
-}
-
-/* ==========================================================
-   BODY
-========================================================== */
-
-body{
-
-    background:var(--bg);
-
-    color:var(--text);
-
-    transition:.25s;
-
-}
-
-/* ==========================================================
-   LAYOUT
-========================================================== */
-
-.app{
-
-    display:flex;
-
-    height:100vh;
-
-    overflow:hidden;
-
-}
-
-.content{
-
-    flex:1;
-
-    overflow:auto;
-
-    padding:35px;
-
-}
-
-.content h1{
-
-    font-size:42px;
-
-    margin-bottom:10px;
-
-}
-
-.content h2{
-
-    margin-bottom:15px;
-
-}
-
-.content p{
-
-    color:var(--text-light);
-
-}
-/* ==========================================================
-   BUTTONS
-========================================================== */
-
-.btn{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:8px;
-
-    padding:12px 18px;
-
-    border:none;
-
-    border-radius:12px;
-
-    font-size:14px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-}
-
-.btn:hover{
-
-    transform:translateY(-2px);
-
-}
-
-.btn-primary{
-
-    background:var(--accent);
-
-    color:white;
-
-}
-
-.btn-primary:hover{
-
-    background:var(--accent-hover);
-
-}
-
-.btn-danger{
-
-    background:var(--danger);
-
-    color:white;
-
-}
-
-.btn-danger:hover{
-
-    filter:brightness(.95);
-
-}
-
-.btn-success{
-
-    background:var(--success);
-
-    color:white;
-
-}
-
-.btn-success:hover{
-
-    filter:brightness(.95);
-
-}
-
-/* ==========================================================
-   FORMULARE
-========================================================== */
-
-label{
-
-    display:block;
-
-    margin-bottom:8px;
-
-    font-weight:600;
-
-}
-
+button,
 input,
 select,
 textarea{
 
-    width:100%;
-
-    padding:12px 14px;
-
-    background:var(--surface);
-
-    color:var(--text);
-
-    border:1px solid var(--border);
-
-    border-radius:12px;
-
-    font-size:15px;
-
-    margin-bottom:15px;
-
-    transition:.2s;
+    font:inherit;
 
 }
 
-textarea{
+button{
 
-    resize:vertical;
-
-    min-height:110px;
+    cursor:pointer;
 
 }
 
-input:focus,
-select:focus,
-textarea:focus{
+a{
 
-    outline:none;
+    text-decoration:none;
 
-    border-color:var(--accent);
-
-    box-shadow:0 0 0 3px rgba(36,80,211,.15);
+    color:inherit;
 
 }
+
+img{
+
+    max-width:100%;
+
+    display:block;
+
+}
+
+
 
 /* ==========================================================
-   TABELLEN
+   DESIGN TOKENS
 ========================================================== */
 
-table{
+:root{
 
-    width:100%;
+    --primary:#2563eb;
 
-    border-collapse:collapse;
+    --primary-dark:#1d4ed8;
 
-    background:var(--surface);
+    --primary-light:#dbeafe;
+
+    --background:#f4f7fb;
+
+    --surface:#ffffff;
+
+    --surface-hover:#f9fafb;
+
+    --sidebar:#1e40af;
+
+    --sidebar-hover:rgba(255,255,255,.10);
+
+    --border:#e5e7eb;
+
+    --text:#111827;
+
+    --text-light:#6b7280;
+
+    --success:#16a34a;
+
+    --warning:#d97706;
+
+    --danger:#dc2626;
+
+    --radius-xs:8px;
+
+    --radius-sm:12px;
+
+    --radius-md:16px;
+
+    --radius-lg:22px;
+
+    --shadow-sm:
+        0 2px 8px rgba(15,23,42,.05);
+
+    --shadow:
+        0 8px 24px rgba(15,23,42,.08);
+
+    --shadow-lg:
+        0 20px 50px rgba(15,23,42,.15);
 
 }
 
-thead{
 
-    background:rgba(36,80,211,.05);
-
-}
-
-th{
-
-    text-align:left;
-
-    padding:16px;
-
-    border-bottom:2px solid var(--border);
-
-}
-
-td{
-
-    padding:16px;
-
-    border-bottom:1px solid var(--border);
-
-}
-
-tbody tr{
-
-    transition:.2s;
-
-}
-
-tbody tr:hover{
-
-    background:rgba(36,80,211,.04);
-
-}
 
 /* ==========================================================
-   MODAL
+   DARK MODE
 ========================================================== */
 
-.modal{
+body.dark{
 
-    position:fixed;
+    --background:#0f172a;
 
-    inset:0;
+    --surface:#1e293b;
 
-    display:none;
+    --surface-hover:#263447;
 
-    justify-content:center;
+    --sidebar:#020617;
 
-    align-items:center;
+    --sidebar-hover:rgba(255,255,255,.08);
 
-    background:rgba(0,0,0,.45);
+    --border:#334155;
 
-    backdrop-filter:blur(5px);
+    --text:#f8fafc;
 
-    z-index:9999;
-
-}
-
-.modal-content{
-
-    width:650px;
-
-    max-width:92%;
-
-    background:var(--surface);
-
-    color:var(--text);
-
-    border-radius:18px;
-
-    padding:30px;
-
-    box-shadow:0 20px 50px rgba(0,0,0,.20);
+    --text-light:#94a3b8;
 
 }
 
-.modal-buttons{
+
+
+/* ==========================================================
+   APP LAYOUT
+========================================================== */
+
+.app{
 
     display:flex;
 
-    justify-content:flex-end;
+    width:100vw;
 
-    gap:10px;
+    height:100vh;
 
-    margin-top:20px;
-
-}
-/* ==========================================================
-   BADGES
-========================================================== */
-
-.badge{
-
-    display:inline-block;
-
-    padding:6px 12px;
-
-    border-radius:999px;
-
-    font-size:12px;
-
-    font-weight:600;
+    background:var(--background);
 
 }
 
-.badge-success{
 
-    background:#dcfce7;
-
-    color:#166534;
-
-}
-
-.badge-warning{
-
-    background:#fef3c7;
-
-    color:#92400e;
-
-}
-
-.badge-danger{
-
-    background:#fee2e2;
-
-    color:#991b1b;
-
-}
 
 /* ==========================================================
-   PROTOKOLL
+   SIDEBAR
 ========================================================== */
 
-.protocol{
+.sidebar{
 
-    max-width:1000px;
+    width:270px;
 
-    margin:auto;
+    display:flex;
 
-}
+    flex-direction:column;
 
-.protocol-header{
+    flex-shrink:0;
 
-    margin:20px 0 30px;
-
-}
-
-.protocol h1{
-
-    margin-bottom:20px;
-
-    color:var(--accent);
-
-}
-
-.protocol h2{
-
-    margin:35px 0 15px;
-
-    padding-bottom:8px;
-
-    border-bottom:2px solid var(--border);
-
-}
-
-.protocol h3{
-
-    margin:20px 0 10px;
-
-}
-
-/* ==========================================================
-   SCROLLBAR
-========================================================== */
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-    height:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:var(--bg);
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:#b8c2d1;
-
-    border-radius:20px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:#9aa7bb;
-
-}
-
-/* ==========================================================
-   COMPACT MODE
-========================================================== */
-
-body.compact .card{
-
-    padding:16px;
-
-}
-
-body.compact .btn{
-
-    padding:8px 14px;
-
-}
-
-body.compact th,
-body.compact td{
-
-    padding:10px;
-
-}
-
-body.compact input,
-body.compact select,
-body.compact textarea{
-
-    padding:10px;
-
-}
-
-/* ==========================================================
-   ANIMATIONEN
-========================================================== */
-
-body.no-animations *{
-
-    transition:none !important;
-
-    animation:none !important;
-
-}
-
-/* ==========================================================
-   DARK MODE FEINSCHLIFF
-========================================================== */
-
-body.dark input,
-body.dark select,
-body.dark textarea{
-
-    background:#273449;
+    background:var(--sidebar);
 
     color:white;
 
-}
+    transition:
+        width .25s ease;
 
-body.dark table{
-
-    background:var(--surface);
-
-}
-
-body.dark thead{
-
-    background:#273449;
+    box-shadow:
+        4px 0 18px rgba(0,0,0,.08);
 
 }
 
-body.dark tbody tr:hover{
 
-    background:#2b3648;
-
-}
-
-body.dark .modal-content{
-
-    background:var(--surface);
-
-}
-
-body.dark .badge-success{
-
-    background:#14532d;
-
-    color:#dcfce7;
-
-}
-
-body.dark .badge-warning{
-
-    background:#78350f;
-
-    color:#fde68a;
-
-}
-
-body.dark .badge-danger{
-
-    background:#7f1d1d;
-
-    color:#fecaca;
-
-}
 
 /* ==========================================================
-   RESPONSIVE
+   SIDEBAR HEADER
 ========================================================== */
 
-@media (max-width:1100px){
+.sidebar-header{
 
-    .sidebar{
-
-        width:80px;
-
-        padding:20px 10px;
-
-    }
-
-    .logo{
-
-        font-size:18px;
-
-        text-align:center;
-       color:white;
-
-text-shadow:
-
-0 2px 8px rgba(0,0,0,.15);
-
-    }
-
-    .sidebar button{
-
-        justify-content:center;
-
-        padding:14px;
-
-    }
-
-    .sidebar button span:last-child{
-
-        display:none;
-
-    }
-
-    .content{
-
-        padding:22px;
-
-    }
-
-}
-
-@media (max-width:768px){
-
-    .cards{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .content{
-
-        padding:16px;
-
-    }
-
-    .modal-content{
-
-        width:95%;
-
-        padding:20px;
-
-    }
-
-}
-/* ===========================================
-   TOPBAR
-=========================================== */
-
-.topbar{
-
-    height:72px;
+    height:82px;
 
     display:flex;
 
-    justify-content:space-between;
+    align-items:center;
+
+    padding:0 24px;
+
+    border-bottom:
+
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+
+.logo{
+
+    display:flex;
 
     align-items:center;
 
-    margin-bottom:30px;
+    gap:14px;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    white-space:nowrap;
 
 }
+
+
+
+.logo i{
+
+    font-size:28px;
+
+}
+
+
+
+/* ==========================================================
+   SIDEBAR NAVIGATION
+========================================================== */
+
+.sidebar-nav{
+
+    flex:1;
+
+    padding:18px 14px;
+
+}
+
+
+
+.sidebar-nav hr{
+
+    height:1px;
+
+    border:none;
+
+    margin:18px 8px;
+
+    background:rgba(255,255,255,.08);
+
+}
+
+
+
+/* ==========================================================
+   NAVIGATION BUTTON
+========================================================== */
+
+.nav-item{
+
+    width:100%;
+
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:transparent;
+
+    color:white;
+
+    padding:0 18px;
+
+    margin-bottom:8px;
+
+    transition:
+        background .20s,
+        transform .20s;
+
+}
+
+
+
+.nav-item:hover{
+
+    background:var(--sidebar-hover);
+
+}
+
+
+
+.nav-item:active{
+
+    transform:scale(.98);
+
+}
+
+
+
+.nav-item i{
+
+    width:22px;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
+
+
+
+.nav-item span{
+
+    white-space:nowrap;
+
+}
+
+
+
+/* ==========================================================
+   ACTIVE NAVIGATION
+========================================================== */
+
+.nav-item.active{
+
+    background:white;
+
+    color:var(--primary);
+
+    font-weight:700;
+
+}
+
+
+
+/* ==========================================================
+   SIDEBAR FOOTER
+========================================================== */
+
+.sidebar-footer{
+
+    padding:16px;
+
+    border-top:
+
+        1px solid rgba(255,255,255,.08);
+
+}
+
+
+
+/* ==========================================================
+   COLLAPSED SIDEBAR
+========================================================== */
+
+.sidebar.collapsed{
+
+    width:86px;
+
+}
+
+
+
+.sidebar.collapsed .logo span{
+
+    display:none;
+
+}
+
+
+
+.sidebar.collapsed .logo{
+
+    justify-content:center;
+
+}
+
+
+
+.sidebar.collapsed .nav-item{
+
+    justify-content:center;
+
+    padding:0;
+
+}
+
+
+
+.sidebar.collapsed .nav-item span{
+
+    display:none;
+
+}
+
+
+
+.sidebar.collapsed .sidebar-footer .nav-item span{
+
+    display:none;
+
+}
+/* ==========================================================
+   LumaFlow 5.0
+   PART 1B
+   TOPBAR • SEARCH • USER • HEADER
+========================================================== */
+
+
+/* ==========================================================
+   CONTENT
+========================================================== */
+
+.content{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:var(--background);
+
+    overflow:hidden;
+
+}
+
+
+
+/* ==========================================================
+   TOPBAR
+========================================================== */
+
+.topbar{
+
+    height:82px;
+
+    background:var(--surface);
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    gap:24px;
+
+    flex-shrink:0;
+
+    box-shadow:var(--shadow-sm);
+
+}
+
+
+
+/* ==========================================================
+   TOPBAR LEFT
+========================================================== */
 
 .topbar-left{
 
@@ -820,11 +503,207 @@ text-shadow:
 
     align-items:center;
 
-    gap:20px;
+    gap:18px;
+
+    min-width:260px;
+
+}
+
+
+
+.page-title{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+.page-title h2{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    line-height:1.1;
+
+}
+
+
+
+.page-title small{
+
+    margin-top:3px;
+
+    color:var(--text-light);
+
+    font-size:13px;
+
+}
+
+
+
+/* ==========================================================
+   MENU BUTTON
+========================================================== */
+
+.menu-btn{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:18px;
+
+    box-shadow:var(--shadow-sm);
+
+    transition:.20s;
+
+}
+
+
+
+.menu-btn:hover{
+
+    background:var(--surface-hover);
+
+    transform:translateY(-2px);
+
+    box-shadow:var(--shadow);
+
+}
+
+
+
+.menu-btn:active{
+
+    transform:scale(.96);
+
+}
+
+
+
+/* ==========================================================
+   SEARCH
+========================================================== */
+
+.topbar-center{
 
     flex:1;
 
+    display:flex;
+
+    justify-content:center;
+
 }
+
+
+
+.search-box{
+
+    width:100%;
+
+    max-width:640px;
+
+    height:50px;
+
+    background:var(--background);
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:0 18px;
+
+    transition:.20s;
+
+}
+
+
+
+.search-box:hover{
+
+    background:var(--surface);
+
+}
+
+
+
+.search-box:focus-within{
+
+    border-color:var(--primary);
+
+    box-shadow:
+
+        0 0 0 4px rgba(37,99,235,.10);
+
+}
+
+
+
+.search-box i{
+
+    color:#9ca3af;
+
+    font-size:15px;
+
+}
+
+
+
+.search-box input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+
+
+.search-box input::placeholder{
+
+    color:#9ca3af;
+
+}
+
+
+
+/* ==========================================================
+   RIGHT AREA
+========================================================== */
 
 .topbar-right{
 
@@ -836,27 +715,11 @@ text-shadow:
 
 }
 
-.menu-btn{
 
-    width:44px;
 
-    height:44px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:var(--surface);
-
-    color:var(--text);
-
-    cursor:pointer;
-
-    box-shadow:var(--shadow);
-
-    font-size:18px;
-
-}
+/* ==========================================================
+   ICON BUTTON
+========================================================== */
 
 .icon-btn{
 
@@ -872,23 +735,45 @@ text-shadow:
 
     color:var(--text);
 
-    cursor:pointer;
+    display:flex;
 
-    box-shadow:var(--shadow);
+    align-items:center;
+
+    justify-content:center;
 
     font-size:18px;
 
-}
+    box-shadow:var(--shadow-sm);
 
-#globalSearch{
-
-    margin:0;
-
-    max-width:520px;
-
-    background:var(--surface);
+    transition:.20s;
 
 }
+
+
+
+.icon-btn:hover{
+
+    background:var(--surface-hover);
+
+    transform:translateY(-2px);
+
+    box-shadow:var(--shadow);
+
+}
+
+
+
+.icon-btn:active{
+
+    transform:scale(.96);
+
+}
+
+
+
+/* ==========================================================
+   USER BOX
+========================================================== */
 
 .user-box{
 
@@ -896,102 +781,646 @@ text-shadow:
 
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
     background:var(--surface);
 
-    padding:8px 16px;
+    padding:8px 18px;
 
     border-radius:16px;
+
+    box-shadow:var(--shadow-sm);
+
+    transition:.20s;
+
+}
+
+
+
+.user-box:hover{
 
     box-shadow:var(--shadow);
 
 }
 
+
+
+.user-box strong{
+
+    display:block;
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+
+
+.user-box small{
+
+    display:block;
+
+    margin-top:2px;
+
+    color:var(--text-light);
+
+    font-size:12px;
+
+}
+
+
+
+/* ==========================================================
+   AVATAR
+========================================================== */
+
 .avatar{
 
-    width:42px;
+    width:44px;
 
-    height:42px;
+    height:44px;
 
     border-radius:50%;
 
-    background:var(--accent);
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+    );
 
     color:white;
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
 
-    font-weight:bold;
-
-    font-size:18px;
-
-}
-/* ==========================================
-   COLLAPSE SIDEBAR
-========================================== */
-
-.sidebar.collapsed{
-
-    width:78px;
-
-}
-
-.sidebar.collapsed .logo{
-
-    font-size:0;
-
-}
-
-.sidebar.collapsed .logo::before{
-
-    content:"💡";
-
-    font-size:28px;
-
-}
-
-.sidebar.collapsed button{
-
     justify-content:center;
 
-    padding:14px;
-
-}
-
-.sidebar.collapsed button span:last-child{
-
-    display:none;
-
-}
-
-.sidebar.collapsed .sidebar-footer button span:last-child{
-
-    display:none;
-
-}
-
-.sidebar.collapsed hr{
-
-    margin:15px 0;
-
-}
-/* ==========================================
-   Aktiver Menüpunkt
-========================================== */
-
-.sidebar button.active{
-
-    background:white;
-
-    color:var(--accent);
+    font-size:16px;
 
     font-weight:700;
 
-    border-radius:14px;
+    flex-shrink:0;
+
+}
+/* ==========================================================
+   LumaFlow 5.0
+   PART 1C
+   PAGE • CARDS • SCROLLBAR • UTILITIES • RESPONSIVE
+========================================================== */
+
+
+/* ==========================================================
+   PAGE CONTAINER
+========================================================== */
+
+#page{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding:32px;
+
+    background:var(--background);
+
+}
+
+
+
+/* ==========================================================
+   CONTENT CONTAINER
+========================================================== */
+
+.page-container{
+
+    max-width:1600px;
+
+    margin:0 auto;
+
+    width:100%;
+
+}
+
+
+
+/* ==========================================================
+   PAGE TITLES
+========================================================== */
+
+.page-title-large{
+
+    margin-bottom:30px;
+
+}
+
+
+
+.page-title-large h1{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+
+
+.page-title-large p{
+
+    margin-top:8px;
+
+    color:var(--text-light);
+
+    font-size:15px;
+
+}
+
+
+
+/* ==========================================================
+   GRID
+========================================================== */
+
+.grid{
+
+    display:grid;
+
+    gap:24px;
+
+}
+
+
+
+.grid-2{
+
+    grid-template-columns:
+
+        repeat(2,minmax(0,1fr));
+
+}
+
+
+
+.grid-3{
+
+    grid-template-columns:
+
+        repeat(3,minmax(0,1fr));
+
+}
+
+
+
+.grid-4{
+
+    grid-template-columns:
+
+        repeat(4,minmax(0,1fr));
+
+}
+
+
+
+/* ==========================================================
+   CARD
+========================================================== */
+
+.card{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:24px;
+
+    box-shadow:var(--shadow-sm);
+
+    transition:
+
+        transform .20s,
+
+        box-shadow .20s,
+
+        border-color .20s;
+
+}
+
+
+
+.card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:var(--shadow);
+
+}
+
+
+
+.card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.card-title{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+
+
+.card-subtitle{
+
+    margin-top:5px;
+
+    color:var(--text-light);
+
+    font-size:14px;
+
+}
+
+
+
+/* ==========================================================
+   FLEX HELPERS
+========================================================== */
+
+.flex{
+
+    display:flex;
+
+}
+
+
+
+.flex-column{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+.align-center{
+
+    align-items:center;
+
+}
+
+
+
+.justify-between{
+
+    justify-content:space-between;
+
+}
+
+
+
+.justify-center{
+
+    justify-content:center;
+
+}
+
+
+
+.gap-8{
+
+    gap:8px;
+
+}
+
+
+
+.gap-12{
+
+    gap:12px;
+
+}
+
+
+
+.gap-16{
+
+    gap:16px;
+
+}
+
+
+
+.gap-24{
+
+    gap:24px;
+
+}
+
+
+
+/* ==========================================================
+   SPACING
+========================================================== */
+
+.mt-8{margin-top:8px;}
+
+.mt-12{margin-top:12px;}
+
+.mt-16{margin-top:16px;}
+
+.mt-20{margin-top:20px;}
+
+.mt-24{margin-top:24px;}
+
+.mt-32{margin-top:32px;}
+
+.mb-8{margin-bottom:8px;}
+
+.mb-12{margin-bottom:12px;}
+
+.mb-16{margin-bottom:16px;}
+
+.mb-24{margin-bottom:24px;}
+
+.mb-32{margin-bottom:32px;}
+
+
+
+/* ==========================================================
+   TEXT
+========================================================== */
+
+.text-center{
+
+    text-align:center;
+
+}
+
+
+
+.text-right{
+
+    text-align:right;
+
+}
+
+
+
+.text-muted{
+
+    color:var(--text-light);
+
+}
+
+
+
+.text-success{
+
+    color:var(--success);
+
+}
+
+
+
+.text-warning{
+
+    color:var(--warning);
+
+}
+
+
+
+.text-danger{
+
+    color:var(--danger);
+
+}
+
+
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+    height:10px;
+
+}
+
+
+
+::-webkit-scrollbar-track{
+
+    background:var(--background);
+
+}
+
+
+
+::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:20px;
+
+}
+
+
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#94a3b8;
+
+}
+
+
+
+/* ==========================================================
+   DARK MODE
+========================================================== */
+
+body.dark .card{
+
+    background:var(--surface);
+
+}
+
+
+
+body.dark .search-box{
+
+    background:#1e293b;
+
+}
+
+
+
+body.dark .menu-btn{
+
+    background:#1e293b;
+
+}
+
+
+
+body.dark .icon-btn{
+
+    background:#1e293b;
+
+}
+
+
+
+body.dark .user-box{
+
+    background:#1e293b;
+
+}
+
+
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width:1400px){
+
+    .grid-4{
+
+        grid-template-columns:
+
+            repeat(2,minmax(0,1fr));
+
+    }
+
+}
+
+
+
+@media (max-width:1100px){
+
+    .grid-3{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .grid-2{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .topbar{
+
+        padding:0 20px;
+
+    }
+
+    #page{
+
+        padding:22px;
+
+    }
+
+}
+
+
+
+@media (max-width:900px){
+
+    .sidebar{
+
+        width:84px;
+
+    }
+
+    .logo span{
+
+        display:none;
+
+    }
+
+    .nav-item{
+
+        justify-content:center;
+
+        padding:0;
+
+    }
+
+    .nav-item span{
+
+        display:none;
+
+    }
+
+    .page-title{
+
+        display:none;
+
+    }
+
+}
+
+
+
+@media (max-width:768px){
+
+    .topbar{
+
+        gap:14px;
+
+    }
+
+    .topbar-center{
+
+        display:none;
+
+    }
+
+    .user-box div{
+
+        display:none;
+
+    }
+
+    #page{
+
+        padding:16px;
+
+    }
+
+    .card{
+
+        padding:18px;
+
+    }
 
 }
