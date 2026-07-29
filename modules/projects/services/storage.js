@@ -1,22 +1,25 @@
 // ==========================================
-// LumaFlow - Project Storage
+// LumaFlow
+// Project Storage
 // ==========================================
-
-const PROJECT_STORAGE_KEY = "lumaflow_projects";
 
 const ProjectStorage = {
 
+    KEY: "lumaflow-projects",
+
     load() {
+
+        const json = localStorage.getItem(this.KEY);
+
+        if (!json) return [];
 
         try {
 
-            const data = localStorage.getItem(PROJECT_STORAGE_KEY);
+            return JSON.parse(json);
 
-            if (!data) return [];
+        }
 
-            return JSON.parse(data);
-
-        } catch (error) {
+        catch (error) {
 
             console.error(error);
 
@@ -30,17 +33,11 @@ const ProjectStorage = {
 
         localStorage.setItem(
 
-            PROJECT_STORAGE_KEY,
+            this.KEY,
 
             JSON.stringify(projects)
 
         );
-
-    },
-
-    clear() {
-
-        localStorage.removeItem(PROJECT_STORAGE_KEY);
 
     }
 
