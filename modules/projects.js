@@ -36,15 +36,9 @@ let editIndex = -1;
 
 // ---------------------------------
 
-function saveProjects(){
+function saveProjects() {
 
-    localStorage.setItem(
-
-        "lumaflow_projects",
-
-        JSON.stringify(projects)
-
-    );
+    ProjectService.saveAll(projects);
 
 }
 
