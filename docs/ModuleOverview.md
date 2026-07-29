@@ -1,17 +1,28 @@
-Dashboard
+# Module Overview
 
-Aufgabe
+---
 
-Startseite
+## Dashboard
 
-Verantwortlich für
+### Aufgabe
 
+Startseite der Anwendung.
+
+### Verantwortlich für
+
+- Projektübersicht
+- Aufgabenübersicht
+- Meetings
 - Statistiken
 - Quick Actions
-- Projekte
-- Termine
 
-Abhängigkeiten
+### Öffentliche Funktionen
+
+showDashboard()
+
+refreshDashboard()
+
+### Abhängigkeiten
 
 Projects
 
@@ -19,8 +30,61 @@ Tasks
 
 Calendar
 
-Öffentliche Funktionen
+Meetings
 
-showDashboard()
+---
 
-refreshDashboard()
+## Projects
+
+### Aufgabe
+
+Projektverwaltung.
+
+### Funktionen
+
+- Projekte anzeigen
+- Projekte erstellen
+- Projekte bearbeiten
+- Workspace öffnen
+
+---
+
+## Tasks
+
+...
+
+---
+
+## Calendar
+
+...
+
+---
+
+## Meetings
+
+...
+
+---
+
+## Documents
+
+...
+
+---
+
+## Contacts
+
+...
+
+---
+
+## Protocols
+
+...
+
+---
+
+## Settings
+
+...
