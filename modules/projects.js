@@ -4,9 +4,7 @@
 // Teil 1 / 2
 // ==============================
 
-let projects = JSON.parse(
-    localStorage.getItem("lumaflow_projects")
-) || [];
+let projects = ProjectService.getAll();
 
 projects = projects.map(project => ({
 
