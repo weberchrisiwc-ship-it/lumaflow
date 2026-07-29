@@ -11,17 +11,17 @@ const ProjectPage = {
 
         if (!container) return;
 
-        container.innerHTML = `
+container.innerHTML = `
 
-            <h1>📁 Projekte</h1>
+    ${ProjectHeader.render()}
 
-            <div id="project-toolbar"></div>
+    ${ProjectStatistics.render(projects)}
 
-            <div id="project-grid"></div>
+    <div id="project-toolbar"></div>
 
-            <div id="project-dialog"></div>
+    <div id="project-grid"></div>
 
-        `;
+`;
 
         ProjectToolbar.render();
 
