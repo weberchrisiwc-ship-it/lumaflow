@@ -13,8 +13,9 @@ let editIndex = -1;
 
 function initProjects() {
 
-    projects = ProjectService.getAll()
-        .map(ProjectModel.normalize);
+    ProjectService.init();
+
+    projects = ProjectService.getAll();
 
 }
 
@@ -42,8 +43,7 @@ function showProjects() {
 
 function refreshProjects() {
 
-    projects = ProjectService.getAll()
-        .map(ProjectModel.normalize);
+    projects = ProjectService.getAll();
 
     ProjectPage.render(projects);
 
@@ -55,17 +55,7 @@ function refreshProjects() {
 
 function openProject(projectId) {
 
-    currentProject = ProjectService.get(projectId);
-
-    if (!currentProject) {
-
-        console.error("Projekt nicht gefunden.");
-
-        return;
-
-    }
-
-    ProjectWorkspace.render(currentProject);
+    ProjectWorkspace.open(projectId);
 
 }
 
@@ -107,7 +97,7 @@ function saveProject(projectData) {
 
 function editProject(projectId) {
 
-    const project = ProjectService.get(projectId);
+    const project = ProjectService.getById(projectId);
 
     if (!project) return;
 
