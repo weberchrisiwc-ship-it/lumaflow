@@ -1,37 +1,42 @@
 // ==========================================
-// LumaFlow - Project Model
+// LumaFlow
+// Project Model
 // ==========================================
 
-const ProjectModel = {
+class ProjectModel {
 
-    create() {
+    constructor(data = {}) {
 
-        return {
+        this.id = data.id || crypto.randomUUID();
 
-            id: crypto.randomUUID(),
+        this.number = data.number || "";
 
-            number: "",
+        this.name = data.name || "";
 
-            name: "",
+        this.customer = data.customer || "";
 
-            customer: "",
+        this.description = data.description || "";
 
-            status: "Planung",
+        this.status = data.status || "Aktiv";
 
-            tasks: [],
+        this.startDate = data.startDate || "";
 
-            meetings: [],
+        this.endDate = data.endDate || "";
 
-            protocols: [],
+        this.contacts = data.contacts || [];
 
-            contacts: [],
+        this.tasks = data.tasks || [];
 
-            documents: [],
+        this.meetings = data.meetings || [];
 
-            created: new Date().toISOString()
+        this.documents = data.documents || [];
 
-        };
+        this.activity = data.activity || [];
+
+        this.createdAt = data.createdAt || new Date().toISOString();
+
+        this.updatedAt = data.updatedAt || new Date().toISOString();
 
     }
 
-};
+}
