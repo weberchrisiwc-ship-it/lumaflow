@@ -1,13 +1,28 @@
 // ==========================================
 // LumaFlow
-// Project Workspace
+// Project Workspace Controller
 // ==========================================
 
 const ProjectWorkspace = {
 
-    render(project) {
+    currentProject: null,
 
-        if (!project) return;
+    open(projectId) {
+
+        const project = ProjectService.getById(projectId);
+
+        if (!project) {
+            console.error("Projekt nicht gefunden.");
+            return;
+        }
+
+        this.currentProject = project;
+
+        this.render();
+
+    },
+
+    render() {
 
         setPage(`
 
@@ -23,188 +38,51 @@ const ProjectWorkspace = {
 
         `);
 
-        ProjectWorkspace.renderHeader(project);
+        WorkspaceHeader.render(this.currentProject);
 
-        ProjectWorkspace.renderNavigation(project);
+        WorkspaceNavigation.render();
 
-        ProjectWorkspace.showOverview(project);
-
-    },
-
-    renderHeader(project) {
-
-        document.getElementById("workspace-header").innerHTML = `
-
-            <div class="workspace-header">
-
-                <div>
-
-                    <h1>${project.number}</h1>
-
-                    <p>${project.name}</p>
-
-                </div>
-
-                <div>
-
-                    <span class="badge">
-
-                        ${project.status}
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        `;
+        WorkspaceOverview.render(this.currentProject);
 
     },
 
-    renderNavigation(project) {
+    show(tab) {
 
-        document.getElementById("workspace-navigation").innerHTML = `
+        switch (tab) {
 
-            <div class="workspace-navigation">
+            case "overview":
+                WorkspaceOverview.render(this.currentProject);
+                break;
 
-                <button class="btn btn-primary"
-                    onclick="ProjectWorkspace.showOverview(currentProject)">
-                    Übersicht
-                </button>
+            case "tasks":
+                WorkspaceTasks.render(this.currentProject);
+                break;
 
-                <button class="btn"
-                    onclick="ProjectWorkspace.showTasks(currentProject)">
-                    Aufgaben
-                </button>
+            case "meetings":
+                WorkspaceMeetings.render(this.currentProject);
+                break;
 
-                <button class="btn"
-                    onclick="ProjectWorkspace.showMeetings(currentProject)">
-                    Meetings
-                </button>
+            case "calendar":
+                WorkspaceCalendar.render(this.currentProject);
+                break;
 
-                <button class="btn"
-                    onclick="ProjectWorkspace.showCalendar(currentProject)">
-                    Kalender
-                </button>
+            case "documents":
+                WorkspaceDocuments.render(this.currentProject);
+                break;
 
-                <button class="btn"
-                    onclick="ProjectWorkspace.showDocuments(currentProject)">
-                    Dokumente
-                </button>
+            case "contacts":
+                WorkspaceContacts.render(this.currentProject);
+                break;
 
-                <button class="btn"
-                    onclick="ProjectWorkspace.showContacts(currentProject)">
-                    Kontakte
-                </button>
+            case "activity":
+                WorkspaceActivity.render(this.currentProject);
+                break;
 
-                <button class="btn"
-                    onclick="ProjectWorkspace.showActivity(currentProject)">
-                    Aktivitäten
-                </button>
+            case "settings":
+                WorkspaceSettings.render(this.currentProject);
+                break;
 
-            </div>
-
-        `;
-
-    },
-
-    showOverview(project) {
-
-        document.getElementById("workspace-content").innerHTML = `
-
-            <h2>Projektübersicht</h2>
-
-            <div class="cards">
-
-                <div class="card">
-
-                    <h3>🔥 Aufgaben</h3>
-
-                    <h1>${project.tasks.length}</h1>
-
-                </div>
-
-                <div class="card">
-
-                    <h3>📅 Meetings</h3>
-
-                    <h1>${project.meetings.length}</h1>
-
-                </div>
-
-                <div class="card">
-
-                    <h3>📄 Dokumente</h3>
-
-                    <h1>${project.documents.length}</h1>
-
-                </div>
-
-                <div class="card">
-
-                    <h3>👥 Kontakte</h3>
-
-                    <h1>${project.contacts.length}</h1>
-
-                </div>
-
-            </div>
-
-        `;
-
-    },
-
-    showTasks(project) {
-
-        document.getElementById("workspace-content").innerHTML = `
-            <h2>Aufgaben</h2>
-            <p>Modul folgt.</p>
-        `;
-
-    },
-
-    showMeetings(project) {
-
-        document.getElementById("workspace-content").innerHTML = `
-            <h2>Meetings</h2>
-            <p>Modul folgt.</p>
-        `;
-
-    },
-
-    showCalendar(project) {
-
-        document.getElementById("workspace-content").innerHTML = `
-            <h2>Kalender</h2>
-            <p>Modul folgt.</p>
-        `;
-
-    },
-
-    showDocuments(project) {
-
-        document.getElementById("workspace-content").innerHTML = `
-            <h2>Dokumente</h2>
-            <p>Modul folgt.</p>
-        `;
-
-    },
-
-    showContacts(project) {
-
-        document.getElementById("workspace-content").innerHTML = `
-            <h2>Kontakte</h2>
-            <p>Modul folgt.</p>
-        `;
-
-    },
-
-    showActivity(project) {
-
-        document.getElementById("workspace-content").innerHTML = `
-            <h2>Aktivitäten</h2>
-            <p>Modul folgt.</p>
-        `;
+        }
 
     }
 
