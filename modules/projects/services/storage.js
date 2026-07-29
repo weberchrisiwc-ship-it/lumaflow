@@ -1,5 +1,5 @@
 // ==========================================
-// Project Storage Service
+// LumaFlow - Project Storage
 // ==========================================
 
 const PROJECT_STORAGE_KEY = "lumaflow_projects";
@@ -18,7 +18,7 @@ const ProjectStorage = {
 
         } catch (error) {
 
-            console.error("Fehler beim Laden der Projekte:", error);
+            console.error(error);
 
             return [];
 
@@ -28,18 +28,13 @@ const ProjectStorage = {
 
     save(projects) {
 
-        try {
+        localStorage.setItem(
 
-            localStorage.setItem(
-                PROJECT_STORAGE_KEY,
-                JSON.stringify(projects)
-            );
+            PROJECT_STORAGE_KEY,
 
-        } catch (error) {
+            JSON.stringify(projects)
 
-            console.error("Fehler beim Speichern:", error);
-
-        }
+        );
 
     },
 
