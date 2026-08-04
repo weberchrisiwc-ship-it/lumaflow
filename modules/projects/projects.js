@@ -5,7 +5,6 @@
 
 let projects = [];
 let currentProject = null;
-let editIndex = -1;
 
 // ==========================================
 // Initialisierung
@@ -73,15 +72,15 @@ function createProject() {
 // Projekt speichern
 // ==========================================
 
-function saveProject(projectData) {
+function saveProject(data) {
 
-    if (editIndex === -1) {
+    if (data.id) {
 
-        ProjectService.create(projectData);
+        ProjectService.update(data.id, data);
 
     } else {
 
-        ProjectService.update(projectData);
+        ProjectService.create(data);
 
     }
 
@@ -99,9 +98,11 @@ function editProject(projectId) {
 
     const project = ProjectService.getById(projectId);
 
-    if (!project) return;
+    if (!project) {
 
-    editIndex = projects.findIndex(p => p.id === projectId);
+        return;
+
+    }
 
     ProjectDialog.open(project);
 
