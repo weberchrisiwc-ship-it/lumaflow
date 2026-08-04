@@ -1,15 +1,15 @@
 // ==========================================
 // LumaFlow
-// Project Card Component
+// Project Card V3
 // ==========================================
 
 const ProjectCard = {
 
     render(project) {
 
-        const totalTasks = project.tasks.length;
+        const totalTasks = project.tasks?.length || 0;
 
-        const openTasks = project.tasks.filter(task =>
+        const openTasks = (project.tasks || []).filter(task =>
             task.status !== "Erledigt"
         ).length;
 
@@ -17,137 +17,174 @@ const ProjectCard = {
             ? 0
             : Math.round(((totalTasks - openTasks) / totalTasks) * 100);
 
+        const nextMeeting = (project.meetings || [])[0];
+
+        const statusColor = {
+
+            "Planung":"#94a3b8",
+            "Angebot":"#f59e0b",
+            "Ausschreibung":"#f97316",
+            "Ausführung":"#2563eb",
+            "Abnahme":"#10b981",
+            "Abgeschlossen":"#6b7280"
+
+        };
+
         return `
 
-            <div class="card project-card">
+<div class="project-card">
 
-                <div class="project-card-header">
+<div class="project-status-line"
 
-                    <div>
+style="background:${statusColor[project.status] || "#2563eb"}">
 
-                        <h2>📁 ${project.number}</h2>
+</div>
 
-                        <p>${project.name}</p>
+<div class="project-card-header">
 
-                    </div>
+<div>
 
-                    <span class="project-status">
+<h2>
 
-                        ${project.status}
+🏢 ${project.name}
 
-                    </span>
+</h2>
 
-                </div>
+<div class="project-number">
 
-                <div class="project-card-body">
+${project.number}
 
-                    <p>
+</div>
 
-                        <strong>Kunde</strong>
+</div>
 
-                    </p>
+<div class="project-badge">
 
-                    <p>${project.customer}</p>
+${project.status}
 
-                </div>
+</div>
 
-                <div class="project-progress">
+</div>
 
-                    <div class="project-progress-bar">
+<div class="project-customer">
 
-                        <div
-                            class="project-progress-fill"
-                            style="width:${progress}%">
+👤 ${project.customer || "Kein Kunde"}
 
-                        </div>
+</div>
 
-                    </div>
+<div class="project-progress">
 
-                    <p>
+<div class="project-progress-title">
 
-                        Projektfortschritt
+<span>Projektfortschritt</span>
 
-                        <strong>${progress}%</strong>
+<strong>${progress}%</strong>
 
-                    </p>
+</div>
 
-                </div>
+<div class="project-progress-bar">
 
-                <div class="project-card-stats">
+<div
 
-                    <div>
+class="project-progress-fill"
 
-                        🔥
+style="width:${progress}%">
 
-                        <strong>${openTasks}</strong>
+</div>
 
-                        <span>Offene Aufgaben</span>
+</div>
 
-                    </div>
+</div>
 
-                    <div>
+<div class="project-mini-stats">
 
-                        📅
+<div>
 
-                        <strong>${project.meetings.length}</strong>
+🔥
 
-                        <span>Besprechungen</span>
+<strong>${openTasks}</strong>
 
-                    </div>
+<span>Aufgaben</span>
 
-                    <div>
+</div>
 
-                        📄
+<div>
 
-                        <strong>${project.protocols.length}</strong>
+📅
 
-                        <span>Protokolle</span>
+<strong>${project.meetings.length}</strong>
 
-                    </div>
+<span>Meetings</span>
 
-                    <div>
+</div>
 
-                        👥
+<div>
 
-                        <strong>${project.contacts.length}</strong>
+📄
 
-                        <span>Kontakte</span>
+<strong>${project.documents.length}</strong>
 
-                    </div>
+<span>Dokumente</span>
 
-                </div>
+</div>
 
-                <div class="project-card-actions">
+<div>
 
-                    <button
-                        class="btn btn-primary"
-                        onclick="openProject('${project.id}')">
+👥
 
-                        Projekt öffnen
+<strong>${project.contacts.length}</strong>
 
-                    </button>
+<span>Kontakte</span>
 
-                    <button
-                        class="btn"
-                        onclick="editProject('${project.id}')">
+</div>
 
-                        ✏️
+</div>
 
-                    </button>
+<div class="project-next">
 
-                    <button
-                        class="btn btn-danger"
-                        onclick="deleteProject('${project.id}')">
+<div class="title">
 
-                        🗑️
+📅 Nächster Termin
 
-                    </button>
+</div>
 
-                </div>
+<div>
 
-            </div>
+${nextMeeting
+? nextMeeting.title + "<br>" + nextMeeting.date
+: "Noch kein Termin geplant"}
 
-        `;
+</div>
+
+</div>
+
+<div class="project-footer">
+
+<button
+
+class="btn btn-primary"
+
+onclick="openProject('${project.id}')">
+
+Projekt öffnen
+
+</button>
+
+<button
+
+class="btn"
+
+onclick="editProject('${project.id}')">
+
+✏️
+
+</button>
+
+</div>
+
+</div>
+
+`;
 
     }
 
